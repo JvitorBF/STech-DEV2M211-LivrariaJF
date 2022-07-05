@@ -7,14 +7,14 @@ package br.com.senactech.tlivrariaJF.model;
 
 /**
  *
- * @author jairb
+ * @author jvitorbarbosa
  */
 public class Cliente {
-    private int idCliente;
-    private String nomeCliente;
+    private int idcliente;
+    private String nome;
     private String cpf;
     private String cnpj;
-    private String endereco;
+    private String enderecoCompleto;
     private String telefone;
 
     public Cliente() {
@@ -31,40 +31,40 @@ public class Cliente {
      * @param telefone 
      */
     public Cliente(int idCliente, String nomeCliente, String cpf, String cnpj, String endereco, String telefone) {
-        this.idCliente = idCliente;
-        this.nomeCliente = nomeCliente;
+        this.idcliente = idCliente;
+        this.nome = nomeCliente;
         this.cpf = cpf;
         this.cnpj = cnpj;
-        this.endereco = endereco;
+        this.enderecoCompleto = endereco;
         this.telefone = telefone;
     }
 
     /**
-     * @return the idCliente
+     * @return the idcliente
      */
     public int getIdCliente() {
-        return idCliente;
+        return idcliente;
     }
 
     /**
-     * @param idCliente the idCliente to set
+     * @param idCliente the idcliente to set
      */
     public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+        this.idcliente = idCliente;
     }
 
     /**
-     * @return the nomeCliente
+     * @return the nome
      */
     public String getNomeCliente() {
-        return nomeCliente;
+        return nome;
     }
 
     /**
-     * @param nomeCliente the nomeCliente to set
+     * @param nomeCliente the nome to set
      */
     public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
+        this.nome = nomeCliente;
     }
 
     /**
@@ -96,17 +96,17 @@ public class Cliente {
     }
 
     /**
-     * @return the endereco
+     * @return the enderecoCompleto
      */
     public String getEndereco() {
-        return endereco;
+        return enderecoCompleto;
     }
 
     /**
-     * @param endereco the endereco to set
+     * @param endereco the enderecoCompleto to set
      */
     public void setEndereco(String endereco) {
-        this.endereco = endereco;
+        this.enderecoCompleto = endereco;
     }
 
     /**
@@ -125,7 +125,7 @@ public class Cliente {
     
     @Override
     public String toString() {
-        return "cliente{" + "idCliente=" + idCliente + ", nomeCliente=" + nomeCliente + ", cpf=" + cpf + ", cnpj=" + cnpj + ", endereco=" + endereco + ", telefone=" + telefone + '}';
+        return "cliente{" + "idCliente=" + idcliente + ", nomeCliente=" + nome + ", cpf=" + cpf + ", cnpj=" + cnpj + ", endereco=" + enderecoCompleto + ", telefone=" + telefone + '}';
     }
     
     

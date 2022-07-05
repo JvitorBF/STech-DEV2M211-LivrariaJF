@@ -8,11 +8,11 @@ package br.com.senactech.tlivrariaJF.model;
 /**
  *6. Sobre as editoras, a livraria precisa de
      * seu código, endereço, telefone de contato, e o nome de seu gerente. 
- * @author jairb
+ * @author jvitorbarbosa
  */
 public class Editora {
-    private int idEditora;
-    private String nmEditora;
+    private int ideditora;
+    private String nomeEditora;
     private String endereco;
     private String telefone;
     private String gerente;
@@ -29,27 +29,27 @@ public class Editora {
      * @param gerente 
      */
     public Editora(int idEditora, String nmEditora, String endereco, String telefone, String gerente) {
-        this.idEditora = idEditora;
-        this.nmEditora = nmEditora;
+        this.ideditora = idEditora;
+        this.nomeEditora = nmEditora;
         this.endereco = endereco;
         this.telefone = telefone;
         this.gerente = gerente;
     }
     
     public int getIdEditora() {
-        return idEditora;
+        return ideditora;
     }
     
     public void setIdEditora(int idEditora) {
-        this.idEditora = idEditora;
+        this.ideditora = idEditora;
     }
 
     public String getNmEditora() {
-        return nmEditora;
+        return nomeEditora;
     }
 
     public void setNmEditora(String nmEditora) {
-        this.nmEditora = nmEditora;
+        this.nomeEditora = nmEditora;
     }
 
     public String getEndereco() {
@@ -78,8 +78,8 @@ public class Editora {
 
     @Override
     public String toString() {
-        return "editora{" + "idEditora=" + idEditora + ", nmEditora=" + 
-                nmEditora + ", endereco=" + endereco + ", telefone=" + 
+        return "editora{" + "idEditora=" + ideditora + ", nmEditora=" + 
+                nomeEditora + ", endereco=" + endereco + ", telefone=" + 
                 telefone + ", gerente=" + gerente + '}';
     }
     

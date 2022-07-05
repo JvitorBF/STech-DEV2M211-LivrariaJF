@@ -7,47 +7,47 @@ package br.com.senactech.tlivrariaJF.model;
 
 /**
  *
- * @author jairb
+ * @author jvitorbarbosa
  */
 public class Livro {
 
-    private int idLivro;
-    private String titulo;
+    private int idlivro;
+    private String tituloLivro;
     private String autor;
     private String assunto;
     private String isbn;
     private int estoque;
-    private float preco;
-    private int idEditora;
+    private float valor;
+    private int ideditora;
 
     public Livro() {
     }
 
     public Livro(int idLivro, String titulo, String autor, String assunto, String isbn, int estoque, float preco, int idEditora) {
-        this.idLivro = idLivro;
-        this.titulo = titulo;
+        this.idlivro = idLivro;
+        this.tituloLivro = titulo;
         this.autor = autor;
         this.assunto = assunto;
         this.isbn = isbn;
         this.estoque = estoque;
-        this.preco = preco;
-        this.idEditora = idEditora;
+        this.valor = preco;
+        this.ideditora = idEditora;
     }
 
     public int getIdLivro() {
-        return idLivro;
+        return idlivro;
     }
 
     public void setIdLivro(int idLivro) {
-        this.idLivro = idLivro;
+        this.idlivro = idLivro;
     }
 
     public String getTitulo() {
-        return titulo;
+        return tituloLivro;
     }
 
     public void setTitulo(String titulo) {
-        this.titulo = titulo;
+        this.tituloLivro = titulo;
     }
 
     public String getAutor() {
@@ -83,24 +83,24 @@ public class Livro {
     }
 
     public float getPreco() {
-        return preco;
+        return valor;
     }
 
     public void setPreco(float preco) {
-        this.preco = preco;
+        this.valor = preco;
     }
     
     public int getIdEditora() {
-        return idEditora;
+        return ideditora;
     }
 
     public void setIdEditora(int idEditora) {
-        this.idEditora = idEditora;
+        this.ideditora = idEditora;
     }
 
     @Override
     public String toString() {
-        return "livro{" + "idLivro=" + idLivro + ", titulo=" + titulo + ", autor=" + autor + ", assunto=" + assunto + ", isbn=" + isbn + ", estoque=" + estoque + ", preço=" + preco + ", idEditora=" + idEditora + '}';
+        return "livro{" + "idLivro=" + idlivro + ", titulo=" + tituloLivro + ", autor=" + autor + ", assunto=" + assunto + ", isbn=" + isbn + ", estoque=" + estoque + ", preço=" + valor + ", idEditora=" + ideditora + '}';
     }
 
 }

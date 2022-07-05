@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/João%20Vitor/Documents/NetBeansProjects/STech-DEV2M211-TLivrariaJF/src/br/com/senactech/tlivrariaJF/view/jfLivro.java</file>
-            <file>file:/C:/Users/João%20Vitor/Documents/NetBeansProjects/STech-DEV2M211-TLivrariaJF/src/br/com/senactech/tlivrariaJF/view/jfCliente.java</file>
-            <file>file:/C:/Users/João%20Vitor/Documents/NetBeansProjects/STech-DEV2M211-TLivrariaJF/src/br/com/senactech/tlivrariaJF/view/jfEditora.java</file>
+            <file>file:/C:/Users/João%20Vitor/Documents/NetBeansProjects/STech-DEV2M211-TLivrariaJF/src/br/com/senactech/tlivrariaJF/model/Cliente.java</file>
+            <file>file:/C:/Users/João%20Vitor/Documents/NetBeansProjects/STech-DEV2M211-TLivrariaJF/src/br/com/senactech/tlivrariaJF/model/Livro.java</file>
+            <file>file:/C:/Users/João%20Vitor/Documents/NetBeansProjects/STech-DEV2M211-TLivrariaJF/src/br/com/senactech/tlivrariaJF/model/Editora.java</file>
+            <file>file:/C:/Users/João%20Vitor/Documents/NetBeansProjects/STech-DEV2M211-TLivrariaJF/src/br/com/senactech/tlivrariaJF/model/VendaLivro.java</file>
         </group>
     </open-files>
 </project-private>

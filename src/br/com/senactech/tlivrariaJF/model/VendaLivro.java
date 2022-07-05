@@ -9,12 +9,12 @@ import java.util.Date;
 
 /**
  *
- * @author jairb
+ * @author jvitorbarbosa
  */
 public class VendaLivro {
 
-    private int idCliente;
-    private int idLivro;
+    private int idcliente;
+    private int idlivro;
     private int qtd;
     private float subTotal;
     private Date dataVenda;
@@ -23,27 +23,27 @@ public class VendaLivro {
     }
 
     public VendaLivro(int idCliente, int idLivro, int qtd, float subTotal, Date dataVenda) {
-        this.idCliente = idCliente;
-        this.idLivro = idLivro;
+        this.idcliente = idCliente;
+        this.idlivro = idLivro;
         this.qtd = qtd;
         this.subTotal = subTotal;
         this.dataVenda = dataVenda;
     }
 
     public int getIdCliente() {
-        return idCliente;
+        return idcliente;
     }
 
     public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+        this.idcliente = idCliente;
     }
 
     public int getIdLivro() {
-        return idLivro;
+        return idlivro;
     }
 
     public void setIdLivro(int idLivro) {
-        this.idLivro = idLivro;
+        this.idlivro = idLivro;
     }
 
     public int getQtd() {
@@ -72,6 +72,6 @@ public class VendaLivro {
 
     @Override
     public String toString() {
-        return "vendaLivro{" + "idCliente=" + idCliente + ", idLivro=" + idLivro + ", qtd=" + qtd + ", subTotal=" + subTotal + ", dataVenda=" + dataVenda + '}';
+        return "vendaLivro{" + "idCliente=" + idcliente + ", idLivro=" + idlivro + ", qtd=" + qtd + ", subTotal=" + subTotal + ", dataVenda=" + dataVenda + '}';
     }
 }
