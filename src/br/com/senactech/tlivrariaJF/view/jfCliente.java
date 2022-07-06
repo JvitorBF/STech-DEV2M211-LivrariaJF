@@ -51,6 +51,9 @@ public class jfCliente extends javax.swing.JFrame {
         jbCancelar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtClientes = new javax.swing.JTable();
+        jbEditar = new javax.swing.JButton();
+        jbConfirmar = new javax.swing.JButton();
+        jbDeletar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,6 +117,17 @@ public class jfCliente extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jtClientes);
         jtClientes.getAccessibleContext().setAccessibleName("");
 
+        jbEditar.setText("Editar");
+        jbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEditarActionPerformed(evt);
+            }
+        });
+
+        jbConfirmar.setText("Confirmar");
+
+        jbDeletar.setText("Deletar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -144,11 +158,19 @@ public class jfCliente extends javax.swing.JFrame {
                                 .addComponent(jtfTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jbSalvar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbLimpar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbCancelar)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbConfirmar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbDeletar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbCancelar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jbSalvar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jbLimpar)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -173,14 +195,19 @@ public class jfCliente extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jtfEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbSalvar)
-                    .addComponent(jbLimpar)
+                    .addComponent(jbLimpar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbEditar)
+                    .addComponent(jbConfirmar)
+                    .addComponent(jbDeletar)
                     .addComponent(jbCancelar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         jtfNomeCliente.getAccessibleContext().setAccessibleName("");
@@ -276,6 +303,10 @@ public class jfCliente extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jbSalvarActionPerformed
 
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbEditarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -321,6 +352,9 @@ public class jfCliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton jbCancelar;
+    private javax.swing.JButton jbConfirmar;
+    private javax.swing.JButton jbDeletar;
+    private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbLimpar;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JRadioButton jrbCnpj;
