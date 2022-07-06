@@ -99,7 +99,9 @@ public class jfCliente extends javax.swing.JFrame {
 
         jtClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
                 "idCliente", "Nome", "CPF", "CNPJ", "Telefone", "Endereço"
@@ -108,9 +110,16 @@ public class jfCliente extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jtClientes.setToolTipText("");
@@ -207,7 +216,7 @@ public class jfCliente extends javax.swing.JFrame {
                     .addComponent(jbConfirmar)
                     .addComponent(jbDeletar)
                     .addComponent(jbCancelar))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jtfNomeCliente.getAccessibleContext().setAccessibleName("");

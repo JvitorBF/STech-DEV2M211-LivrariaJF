@@ -16,18 +16,18 @@ import java.sql.DriverManager;
 public class Conexao {
 
     // cria uma constante com endereço do BD e schema 
-    private static final String url = "jdbc:mysql://localhost:3306/devm211livraria";
+    private static String url = "jdbc:mysql://localhost:3306/devm211livraria";
     // cria uma constante com USER de conexão do banco
-    private static final String use = "root";
+    private static String user = "root";
     // cria uma constante com a senha de acesso ao BD
-    private static final String pass = "";
+    private static String pass = "";
 
     public static Connection getConnection() throws SQLException {
         // Iniciar conexão nula, ainda não estabelecida 
         Connection c = null;
         // Tenta estabelecer conexão
         try {
-            c = DriverManager.getConnection(url, use, pass);
+            c = DriverManager.getConnection(url, user, pass);
             // Caso haja falha na conexão gera uma exceção
         } catch (SQLException e) {
             throw new SQLException("Erro ao conectar! \n" + e.getMessage());
