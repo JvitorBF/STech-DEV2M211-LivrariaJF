@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /**
  *
@@ -40,6 +41,17 @@ public class Conexao {
         try {
             if (con != null) {
                 con.close();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao fechar conexão com o Banco de dados");
+        }
+    }
+
+    public static void closeConnection(Connection con, Statement stmt) throws SQLException {
+        closeConnection(con);
+        try {
+            if (stmt != null) {
+                stmt.close();
             }
         } catch (SQLException e) {
             throw new SQLException("Erro ao fechar conexão com o Banco de dados");
