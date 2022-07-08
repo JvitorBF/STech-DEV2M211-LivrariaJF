@@ -8,6 +8,7 @@ package br.com.senactech.TLivrariaJF.conexao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -16,7 +17,7 @@ import java.sql.DriverManager;
 public class Conexao {
 
     // cria uma constante com endereço do BD e schema 
-    private static String url = "jdbc:mysql://localhost:3306/devm211livraria";
+    private static String url = "jdbc:mysql://localhost:3306/dev211livraria";
     // cria uma constante com USER de conexão do banco
     private static String user = "root";
     // cria uma constante com a senha de acesso ao BD
@@ -33,5 +34,26 @@ public class Conexao {
             throw new SQLException("Erro ao conectar! \n" + e.getMessage());
         }
         return c;
+    }
+
+    public static void closeConnection(Connection con) throws SQLException {
+        try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao fechar conexão com o Banco de dados");
+        }
+    }
+
+    public static void closeConnection(Connection con, PreparedStatement stmt) throws SQLException {
+        closeConnection(con);
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao fechar conexão com o Banco de dados");
+        }
     }
 }
