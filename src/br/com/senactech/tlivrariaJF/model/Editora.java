@@ -22,15 +22,15 @@ public class Editora {
 
     /**
      * 
-     * @param idEditora
-     * @param nmEditora
+     * @param ideditora
+     * @param nomeEditora
      * @param endereco
      * @param telefone
      * @param gerente 
      */
-    public Editora(int idEditora, String nmEditora, String endereco, String telefone, String gerente) {
-        this.ideditora = idEditora;
-        this.nomeEditora = nmEditora;
+    public Editora(int ideditora, String nomeEditora, String endereco, String telefone, String gerente) {
+        this.ideditora = ideditora;
+        this.nomeEditora = nomeEditora;
         this.endereco = endereco;
         this.telefone = telefone;
         this.gerente = gerente;

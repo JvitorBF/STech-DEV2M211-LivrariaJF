@@ -23,48 +23,48 @@ public class Cliente {
     
     /**
      * Contrutor Cliente
-     * @param idCliente
-     * @param nomeCliente
+     * @param idcliente
+     * @param nome
      * @param cpf
      * @param cnpj
-     * @param endereco
+     * @param enderecoCompleto
      * @param telefone 
      */
-    public Cliente(int idCliente, String nomeCliente, String cpf, String cnpj, String endereco, String telefone) {
-        this.idcliente = idCliente;
-        this.nome = nomeCliente;
+    public Cliente(int idcliente, String nome, String cpf, String cnpj, String enderecoCompleto, String telefone) {
+        this.idcliente = idcliente;
+        this.nome = nome;
         this.cpf = cpf;
         this.cnpj = cnpj;
-        this.enderecoCompleto = endereco;
+        this.enderecoCompleto = enderecoCompleto;
         this.telefone = telefone;
     }
 
     /**
      * @return the idcliente
      */
-    public int getIdCliente() {
+    public int getIdcliente() {
         return idcliente;
     }
 
     /**
-     * @param idCliente the idcliente to set
+     * @param idcliente the idcliente to set
      */
-    public void setIdCliente(int idCliente) {
-        this.idcliente = idCliente;
+    public void setIdcliente(int idcliente) {
+        this.idcliente = idcliente;
     }
 
     /**
      * @return the nome
      */
-    public String getNomeCliente() {
+    public String getNome() {
         return nome;
     }
 
     /**
-     * @param nomeCliente the nome to set
+     * @param nome the nome to set
      */
-    public void setNomeCliente(String nomeCliente) {
-        this.nome = nomeCliente;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     /**
@@ -103,10 +103,10 @@ public class Cliente {
     }
 
     /**
-     * @param endereco the enderecoCompleto to set
+     * @param enderecoCompleto the enderecoCompleto to set
      */
-    public void setEndereco(String endereco) {
-        this.enderecoCompleto = endereco;
+    public void setEndereco(String enderecoCompleto) {
+        this.enderecoCompleto = enderecoCompleto;
     }
 
     /**
@@ -125,7 +125,7 @@ public class Cliente {
     
     @Override
     public String toString() {
-        return "cliente{" + "idCliente=" + idcliente + ", nomeCliente=" + nome + ", cpf=" + cpf + ", cnpj=" + cnpj + ", endereco=" + enderecoCompleto + ", telefone=" + telefone + '}';
+        return "cliente{" + "idCliente=" + idcliente + ", nome=" + nome + ", cpf=" + cpf + ", cnpj=" + cnpj + ", enderecoCompleto=" + enderecoCompleto + ", telefone=" + telefone + '}';
     }
     
     

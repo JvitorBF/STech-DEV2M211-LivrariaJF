@@ -19,16 +19,16 @@ public class CClientes {
 
     public void mokClientes() {
         Cliente cli = new Cliente();
-        cli.setIdCliente(this.addIdCli());
-        cli.setNomeCliente("Juventino Florencio");
+        cli.setIdcliente(this.addIdCliente());
+        cli.setNome("Juventino Florencio");
         cli.setCpf("123");
         cli.setCnpj(null);
         cli.setEndereco("Flores da Cunha");
         cli.setTelefone("51 44334433");
         this.addCliente(cli);
         Cliente cli2 = new Cliente();
-        cli2.setIdCliente(this.addIdCli());
-        cli2.setNomeCliente("Josnelson das Candongas");
+        cli2.setIdcliente(this.addIdCliente());
+        cli2.setNome("Josnelson das Candongas");
         cli2.setCpf(null);
         cli2.setCnpj("321");
         cli2.setEndereco("Dorival de Oliveira");
@@ -36,8 +36,8 @@ public class CClientes {
         this.addCliente(cli2);
     }
 
-    public int addIdCli() {
-            return this.idCliente++;
+    public int addIdCliente() {
+        return this.idCliente++;
     }
 
     public void addCliente(Cliente c) {
@@ -48,12 +48,12 @@ public class CClientes {
         return clientes;
     }
 
-    public Boolean verificaCliente(int idCliente) {
+    public Boolean verificaCliente(int idcliente) {
         boolean verCliente = false;
         for (Cliente cli : clientes) {
-            if (cli.getIdCliente() == idCliente) {
+            if (cli.getIdcliente() == idcliente) {
                 verCliente = true;
-                System.out.println("Cliente: " + cli.getNomeCliente());
+                System.out.println("Cliente: " + cli.getNome());
             }
         }
         return verCliente;

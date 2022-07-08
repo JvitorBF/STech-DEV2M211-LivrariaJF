@@ -23,9 +23,9 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(int idLivro, String titulo, String autor, String assunto, String isbn, int estoque, float preco, int idEditora) {
-        this.idlivro = idLivro;
-        this.tituloLivro = titulo;
+    public Livro(int idlivro, String tituloLivro, String autor, String assunto, String isbn, int estoque, float preco, int idEditora) {
+        this.idlivro = idlivro;
+        this.tituloLivro = tituloLivro;
         this.autor = autor;
         this.assunto = assunto;
         this.isbn = isbn;

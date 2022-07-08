@@ -250,27 +250,27 @@ public class jfCliente extends javax.swing.JFrame {
         jfCliente.this.dispose();
     }//GEN-LAST:event_jbCancelarActionPerformed
 
-    public void addRowToTable(){
+    public void addRowToTable() {
         DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
         Object rowData[] = new Object[6];//define vetor das colunas
-        for (Cliente listCli: cadClientes.getClientes()){
-            rowData[0] = listCli.getIdCliente();
-            rowData[1] = listCli.getNomeCliente();
+        for (Cliente listCli : cadClientes.getClientes()) {
+            rowData[0] = listCli.getIdcliente();
+            rowData[1] = listCli.getNome();
             rowData[2] = listCli.getCpf();
             rowData[3] = listCli.getCnpj();
             rowData[4] = listCli.getTelefone();
             rowData[5] = listCli.getEndereco();
             model.addRow(rowData);
         }
-        
+
     }
-    
+
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         // TODO add your handling code here:
         Cliente cli = new Cliente();
-        cli.setNomeCliente(jtfNomeCliente.getText());
+        cli.setNome(jtfNomeCliente.getText());
         cli.setTelefone(jtfTelefone.getText());
         cli.setEndereco(jtfEndereco.getText());
         boolean doc = false;
@@ -280,7 +280,7 @@ public class jfCliente extends javax.swing.JFrame {
             tPessoa = 1;
         } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
             tPessoa = 2;
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione tipo de cliente.");
         }
         Cliente cliCpfCnpj;
@@ -294,22 +294,22 @@ public class jfCliente extends javax.swing.JFrame {
             cli.setCnpj(jtfCpfCnpj.getText());
             doc = false;
         }
-        if (cadClientes.verificaCliente(cliCpfCnpj.getIdCliente())) {
+        if (cadClientes.verificaCliente(cliCpfCnpj.getIdcliente())) {
             JOptionPane.showMessageDialog(this, "Este documento já existe!"
                     + "\nTente novamente!!!");
             doc = true;
         }
         //Cadastro a partir das validações
         if ((jrbCpf.isSelected() || jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
-            cli.setIdCliente(cadClientes.addIdCli());
+            cli.setIdcliente(cadClientes.addIdCliente());
             cadClientes.addCliente(cli);
             addRowToTable();
             jbLimpar.doClick();
-            JOptionPane.showMessageDialog(this, cli.getNomeCliente() + " cadastrado com sucesso!");
+            JOptionPane.showMessageDialog(this, cli.getNome() + " cadastrado com sucesso!");
         } else {
             JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
         }
-        
+
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
