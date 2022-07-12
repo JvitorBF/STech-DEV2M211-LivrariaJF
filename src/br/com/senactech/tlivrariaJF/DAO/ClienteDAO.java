@@ -19,6 +19,13 @@ import java.sql.SQLException;
  */
 public class ClienteDAO {
 
+//     private int idcliente;
+//    private String nome;
+//    private String cpf;
+//    private String cnpj;
+//    private String enderecoCompleto;
+//    private String telefone;
+    
     public ArrayList<Cliente> selectCliente() throws SQLException {
         Connection con = Conexao.getConnection();
         Statement stmt = con.createStatement();
@@ -42,6 +49,46 @@ public class ClienteDAO {
             throw new SQLException("Erro ao buscar Clientes" + e.getMessage());
         } finally {
             Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void cadastrarClienteCPF(Cliente cVO) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "insert into cliente values (null,'" + cVO.getNome() + "','"
+                    + cVO.getCpf() + "','"
+                    + "null','"
+                    + cVO.getEndereco() + "','"
+                    + cVO.getTelefone() + "')";
+            System.out.println(sql);
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao cadastrar cliente Físico!" + e.getMessage());
+        } finally {
+            con.close();
+            stmt.close();
+        }
+    }
+
+    public void cadastrarClienteCNPJ(Cliente cVO) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "insert into cliente values (null,'" + cVO.getNome() + "','"
+                    + "null','"
+                    + cVO.getCnpj() + "','"
+                    + cVO.getEndereco() + "','"
+                    + cVO.getTelefone() + "')";
+            System.out.println(sql);
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao cadastrar cliente Jurídico!" + e.getMessage());
+        } finally {
+            con.close();
+            stmt.close();
         }
     }
 
