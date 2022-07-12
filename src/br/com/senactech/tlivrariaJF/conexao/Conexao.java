@@ -57,15 +57,4 @@ public class Conexao {
             throw new SQLException("Erro ao fechar conexão com o Banco de dados");
         }
     }
-
-    public static void closeConnection(Connection con, PreparedStatement stmt) throws SQLException {
-        closeConnection(con);
-        try {
-            if (stmt != null) {
-                stmt.close();
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Erro ao fechar conexão com o Banco de dados");
-        }
-    }
 }
