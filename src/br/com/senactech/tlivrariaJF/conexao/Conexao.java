@@ -8,7 +8,6 @@ package br.com.senactech.TLivrariaJF.conexao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 /**
@@ -18,11 +17,11 @@ import java.sql.Statement;
 public class Conexao {
 
     // cria uma constante com endereço do BD e schema 
-    private static String url = "jdbc:mysql://localhost:3306/dev211livraria";
+    private static final String url = "jdbc:mysql://localhost:3306/dev211livraria";
     // cria uma constante com USER de conexão do banco
-    private static String user = "root";
+    private static final String user = "root";
     // cria uma constante com a senha de acesso ao BD
-    private static String pass = "";
+    private static final String pass = "";
 
     public static Connection getConnection() throws SQLException {
         // Iniciar conexão nula, ainda não estabelecida 
