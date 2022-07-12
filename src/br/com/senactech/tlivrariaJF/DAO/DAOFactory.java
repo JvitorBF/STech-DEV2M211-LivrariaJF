@@ -10,5 +10,22 @@ package br.com.senactech.TLivrariaJF.DAO;
  * @author João Vitor
  */
 public class DAOFactory {
-    
+
+    private static final ClienteDAO cDAO = new ClienteDAO();
+
+    public static ClienteDAO getClienteDAO() {
+        return cDAO;
+    }
+
+    private static final EditoraDAO eDAO = new EditoraDAO();
+
+    public static EditoraDAO getEditoraDAO() {
+        return eDAO;
+    }
+
+    private static final LivroDAO lDAO = new LivroDAO();
+
+    public static LivroDAO getLivroDAO() {
+        return lDAO;
+    }
 }
