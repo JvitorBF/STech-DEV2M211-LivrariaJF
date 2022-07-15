@@ -26,10 +26,20 @@ public class ClienteServicos {
         ClienteDAO cDAO = DAOFactory.getClienteDAO();
         cDAO.cadastrarClienteCPF(cVO);
     }
-    
-    public void cadastrarClienteCNPJ (Cliente cVO) throws SQLException {
+
+    public void cadastrarClienteCNPJ(Cliente cVO) throws SQLException {
         ClienteDAO cDAO = DAOFactory.getClienteDAO();
         cDAO.cadastrarClienteCNPJ(cVO);
+    }
+
+    public void atualizarCliente(Cliente cVO) throws SQLException {
+        ClienteDAO cDAO = DAOFactory.getClienteDAO();
+        cDAO.atualizarCliente(cVO);
+    }
+
+    public void deletarCliente(int id) throws SQLException {
+        ClienteDAO cVO = DAOFactory.getClienteDAO();
+        cVO.deletarCliente(id);
     }
 
 }
