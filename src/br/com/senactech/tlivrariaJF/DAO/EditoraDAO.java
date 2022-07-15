@@ -5,10 +5,93 @@
  */
 package br.com.senactech.TLivrariaJF.DAO;
 
+import br.com.senactech.TLivrariaJF.conexao.Conexao;
+import br.com.senactech.tlivrariaJF.model.Editora;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 /**
  *
  * @author João Vitor
  */
 public class EditoraDAO {
-    
+
+    public ArrayList<Editora> selectEditora() throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "select * from editora";
+            ResultSet rs = stmt.executeQuery(sql);
+            ArrayList<Editora> editoras = new ArrayList<>();
+            while (rs.next()) {
+                Editora e = new Editora();
+                e.setIdEditora(rs.getInt("ideditora"));
+                e.setNmEditora(rs.getString("nomeEditora"));
+                e.setEndereco(rs.getString("endereco"));
+                e.setTelefone(rs.getString("telefone"));
+                e.setGerente(rs.getString("gerente"));
+                editoras.add(e);
+            }
+            return editoras;
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao buscar Editora" + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void cadastrarEditora(Editora eVO) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "insert into editora values (null,'" + eVO.getNmEditora() + "','"
+                    + eVO.getEndereco() + "','"
+                    + eVO.getTelefone() + "','"
+                    + eVO.getGerente() + "')";
+            System.out.println(sql);
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao cadastrar editora!" + e.getMessage());
+        } finally {
+            con.close();
+            stmt.close();
+        }
+    }
+
+    public void atualizarEditora(Editora eVO) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "update editora set"
+                    + "nomeEditora = '" + eVO.getNmEditora() + "',"
+                    + "endereco = '" + eVO.getEndereco() + "',"
+                    + "telefone = '" + eVO.getTelefone() + "',"
+                    + "gerente = '" + eVO.getGerente() + "'";
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao atualizar editora! " + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void deletarEditora(int id) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "delete from editora where ideditora = " + id;
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao deletar editora! " + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
 }
