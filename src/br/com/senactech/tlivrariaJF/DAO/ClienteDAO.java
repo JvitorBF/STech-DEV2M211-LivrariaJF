@@ -19,13 +19,6 @@ import java.sql.SQLException;
  */
 public class ClienteDAO {
 
-//     private int idcliente;
-//    private String nome;
-//    private String cpf;
-//    private String cnpj;
-//    private String enderecoCompleto;
-//    private String telefone;
-    
     public ArrayList<Cliente> selectCliente() throws SQLException {
         Connection con = Conexao.getConnection();
         Statement stmt = con.createStatement();
@@ -58,8 +51,8 @@ public class ClienteDAO {
         try {
             String sql;
             sql = "insert into cliente values (null,'" + cVO.getNome() + "','"
-                    + cVO.getCpf() + "','"
-                    + "null','"
+                    + cVO.getCpf() + "',"
+                    + "null,'"
                     + cVO.getEndereco() + "','"
                     + cVO.getTelefone() + "')";
             System.out.println(sql);
@@ -77,8 +70,8 @@ public class ClienteDAO {
         Statement stmt = con.createStatement();
         try {
             String sql;
-            sql = "insert into cliente values (null,'" + cVO.getNome() + "','"
-                    + "null','"
+            sql = "insert into cliente values (null,'" + cVO.getNome() + "',"
+                    + "null,'"
                     + cVO.getCnpj() + "','"
                     + cVO.getEndereco() + "','"
                     + cVO.getTelefone() + "')";
@@ -92,11 +85,40 @@ public class ClienteDAO {
         }
     }
 
-    // Cadastrar
-    //public void cadastrarCliente(Cliente cVO) throws SQLException {
-    ////    Statement stat = con.createStatement();
-    // }
+    public void atualizarCliente(Cliente cVO) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "update cliente set"
+                    + "nome = '" + cVO.getNome() + "',"
+                    + "cpf = '" + cVO.getCpf() + "',"
+                    + "cnpj = '" + cVO.getCnpj() + "',"
+                    + "enderecoCompleto = '" + cVO.getEndereco() + "',"
+                    + "telefone = '" + cVO.getTelefone() + "'";
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao atualizar cliente! " + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void deletarCliente(int id) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+
+        try {
+            String sql;
+            sql = "delete from cliente where idcliente = " + id;
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao deletar cliente! " + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
     // Ler
-    // Atualizar
     // Deletar
 }
