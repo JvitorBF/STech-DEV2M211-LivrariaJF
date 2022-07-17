@@ -145,6 +145,11 @@ public class jfCliente extends javax.swing.JFrame {
 
         jbConfirmar.setText("Confirmar");
         jbConfirmar.setEnabled(false);
+        jbConfirmar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbConfirmarActionPerformed(evt);
+            }
+        });
 
         jbDeletar.setText("Deletar");
         jbDeletar.setEnabled(false);
@@ -347,17 +352,15 @@ public class jfCliente extends javax.swing.JFrame {
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
         try {
-            // TODO add your handling code here:            
-            // Ajustando o comportamento dos botões
             jbDeletar.setEnabled(false);
             jbSalvar.setEnabled(false);
             jbEditar.setEnabled(false);
             jrbCpf.setEnabled(false);
             jrbCnpj.setEnabled(false);
+            jtfCpfCnpj.setEnabled(false);
             jbConfirmar.setEnabled(true);
             jbLimpar.setText("Cancelar");
 
-            //carregar os dados da pessoa selecionada
             int linha_da_tabela;
             String CPF;
             String CNPJ;
@@ -392,6 +395,7 @@ public class jfCliente extends javax.swing.JFrame {
         jbDeletar.setEnabled(true);
         jbEditar.setEnabled(true);
         jbSalvar.setEnabled(false);
+        jbLimpar.setText("Cancelar");
     }//GEN-LAST:event_jtClientesMouseClicked
 
     private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
@@ -406,9 +410,9 @@ public class jfCliente extends javax.swing.JFrame {
         ClienteServicos clienteS = ServicosFactory.getClienteServicos();
         Cliente c = new Cliente();
         try {
-            if (CPF.contains(CPF)) {
+            if ((CPF == null ? CPF == null : CPF.equals(CPF)) && CNPJ == null) {
                 c = clienteS.getByDocCPF(CPF);
-            } else {
+            } else if ((CNPJ == null ? CNPJ == null : CNPJ.equals(CNPJ)) && CPF == null) {
                 c = clienteS.getByDocCNPJ(CNPJ);
             }
         } catch (SQLException ex) {
@@ -434,6 +438,66 @@ public class jfCliente extends javax.swing.JFrame {
         }
         jbDeletar.setEnabled(false);
     }//GEN-LAST:event_jbDeletarActionPerformed
+
+    private void jbConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConfirmarActionPerformed
+        if (validaImputs()) {
+            try {
+                ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+                int tPessoa = 0;
+                if (jrbCpf.isSelected() && !jrbCnpj.isSelected()) {
+                    tPessoa = 1;
+                } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
+                    tPessoa = 2;
+                }
+
+                Cliente c = clienteS.pesqCli(tPessoa, jtfCpfCnpj.getText());
+                c.setNome(jtfNomeCliente.getText());
+                c.setEndereco(jtfEndereco.getText());
+                c.setTelefone(jtfTelefone.getText());
+                System.out.println(c.toString());
+                clienteS.atualizarCliente(c);                
+                addRowToTableBD();
+
+                jbConfirmar.setEnabled(false);
+                jbSalvar.setEnabled(true);
+                jbLimpar.setEnabled(true);
+
+                jbLimpar.doClick();
+                jbLimpar.setText("Limpar");
+
+                String msg = "Dados atualizado com sucesso!";
+                JOptionPane.showMessageDialog(this, msg, ".: Atualizar :.", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException ex) {
+                Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            jbLimpar.doClick();
+            jtfCpfCnpj.setEnabled(true);
+        }
+        jtfCpfCnpj.setEnabled(true);
+    }//GEN-LAST:event_jbConfirmarActionPerformed
+
+    private boolean validaImputs() {
+        String telefone = jtfTelefone.getText();
+        if (jtfNomeCliente.getText().isBlank()
+                || jtfCpfCnpj.getText().isBlank()
+                || jtfEndereco.getText().isBlank()
+                || bgCpfCnpj.getSelection() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Todos os campos devem ser preenchidos!",
+                    ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+            jtfNomeCliente.requestFocus();
+            return false;
+        }
+        if (telefone.length() < 11) {
+            JOptionPane.showMessageDialog(this,
+                    "Telefone informado esta incorreto",
+                    ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+            jtfTelefone.requestFocus();
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @param args the command line arguments

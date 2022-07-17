@@ -88,13 +88,12 @@ public class ClienteDAO {
         Statement stmt = con.createStatement();
         try {
             String sql;
-            sql = "update cliente set"
+            sql = "update cliente set "
                     + "nome = '" + cVO.getNome() + "',"
-                    + "cpf = '" + cVO.getCpf() + "',"
-                    + "cnpj = '" + cVO.getCnpj() + "',"
                     + "enderecoCompleto = '" + cVO.getEndereco() + "',"
-                    + "telefone = '" + cVO.getTelefone() + "'";
-            stmt.execute(sql);
+                    + "telefone = '" + cVO.getTelefone() + "' "
+                    + "where idCliente = " + cVO.getIdcliente() + "";
+            stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao atualizar cliente! " + e.getMessage());
         } finally {
