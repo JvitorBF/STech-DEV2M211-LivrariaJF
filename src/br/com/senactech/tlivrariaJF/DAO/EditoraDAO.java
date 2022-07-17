@@ -58,8 +58,7 @@ public class EditoraDAO {
         } catch (SQLException e) {
             throw new SQLException("Erro ao cadastrar editora!" + e.getMessage());
         } finally {
-            con.close();
-            stmt.close();
+            Conexao.closeConnection(con, stmt);
         }
     }
 
@@ -94,4 +93,27 @@ public class EditoraDAO {
             Conexao.closeConnection(con, stmt);
         }
     }
+
+    public String getNomeEdt(int idEditora) throws SQLException {
+        String nome = "";
+        for (Editora edt : selectEditora()) {
+            if (edt.getIdEditora() == idEditora) {
+                nome = edt.getNmEditora();
+                System.out.println("Editora: " + edt.getNmEditora());
+            }
+        }
+        return nome;
+    }
+
+    public int getIdEditora(String nome) throws SQLException {
+        int idEditora = 0;
+        for (Editora edt : selectEditora()) {
+            if (edt.getNmEditora().equals(nome)) {
+                idEditora = edt.getIdEditora();
+                System.out.println("Editora: " + edt.getNmEditora());
+            }
+        }
+        return idEditora;
+    }
+
 }

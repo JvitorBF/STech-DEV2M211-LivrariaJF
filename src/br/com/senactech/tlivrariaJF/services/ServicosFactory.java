@@ -19,7 +19,7 @@ public class ServicosFactory {
     
     private static final EditoraServicos editoraServicos = new EditoraServicos();
     
-    public EditoraServicos getEditoraServicos() {
+    public static EditoraServicos getEditoraServicos() {
         return editoraServicos;
     }
     

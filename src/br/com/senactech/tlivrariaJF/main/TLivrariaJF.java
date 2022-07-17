@@ -23,15 +23,20 @@ import javax.swing.JTextArea;
 import br.com.senactech.tlivrariaJF.view.jfCliente;
 import br.com.senactech.tlivrariaJF.view.jfEditora;
 import br.com.senactech.tlivrariaJF.view.jfLivro;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author jairb
  */
-public class TLivrariaJF extends JFrame implements ActionListener{
+public class TLivrariaJF extends JFrame implements ActionListener {
+
     public static CClientes cadClientes = new CClientes();// Repositório de Clientes
     public static CEditoras cadEditoras = new CEditoras();
     public static CLivros cadLivros = new CLivros();
-    
+
     JTextArea output;
     JScrollPane scrollPane;
 
@@ -52,7 +57,7 @@ public class TLivrariaJF extends JFrame implements ActionListener{
 
         //Clientes
         menuItem = new JMenuItem("Clientes",
-                KeyEvent.VK_C);       
+                KeyEvent.VK_C);
         menuItem.setActionCommand("mClientes");
         menuItem.addActionListener(this);
         menu.add(menuItem);
@@ -70,15 +75,19 @@ public class TLivrariaJF extends JFrame implements ActionListener{
         menuItem.setActionCommand("mLivros");
         menuItem.addActionListener(this);
         menu.add(menuItem);
-        
+
         return menuBar;
     }
 
     public void actionPerformed(ActionEvent e) {
         if ("mClientes".equals(e.getActionCommand())) {
-            jfCliente c = new jfCliente();
-            c.setVisible(true);
-            c.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            try {
+                jfCliente c = new jfCliente();
+                c.setVisible(true);
+                c.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            } catch (SQLException ex) {
+                Logger.getLogger(TLivrariaJF.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if ("mEditoras".equals(e.getActionCommand())) {
             jfEditora ed = new jfEditora();
@@ -86,9 +95,13 @@ public class TLivrariaJF extends JFrame implements ActionListener{
             ed.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         }
         if ("mLivros".equals(e.getActionCommand())) {
-            jfLivro liv = new jfLivro();
-            liv.setVisible(true);
-            liv.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            try {
+                jfLivro liv = new jfLivro();
+                liv.setVisible(true);
+                liv.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            } catch (SQLException ex) {
+                Logger.getLogger(TLivrariaJF.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
@@ -123,7 +136,7 @@ public class TLivrariaJF extends JFrame implements ActionListener{
         frame.setSize(450, 260);
         frame.setVisible(true);
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -132,13 +145,13 @@ public class TLivrariaJF extends JFrame implements ActionListener{
         cadClientes.mokClientes();
         cadEditoras.mokEditoras();
         cadLivros.mokLivros();
-        
+
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
             }
         });
-        
+
     }
-    
+
 }

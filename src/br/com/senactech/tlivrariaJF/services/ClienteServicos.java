@@ -42,4 +42,24 @@ public class ClienteServicos {
         cVO.deletarCliente(id);
     }
 
+    public Boolean verificaCliente(int idcliente) throws SQLException {
+        ClienteDAO cVO = DAOFactory.getClienteDAO();
+        return cVO.verificaCliente(idcliente);
+    }
+
+    public Cliente pesqCli(int cpfCNPJ, String pesq) throws SQLException {
+        ClienteDAO cVO = DAOFactory.getClienteDAO();
+        return cVO.pesqCli(cpfCNPJ, pesq);
+    }
+
+    public Cliente getByDocCPF(String cpf) throws SQLException {
+        ClienteDAO cVO = DAOFactory.getClienteDAO();
+        return cVO.getByDocCPF(cpf);
+    }
+
+    public Cliente getByDocCNPJ(String cnpj) throws SQLException {
+        ClienteDAO cVO = DAOFactory.getClienteDAO();
+        return cVO.getByDocCNPJ(cnpj);
+    }
+
 }

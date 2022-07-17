@@ -51,17 +51,16 @@ public class ClienteDAO {
         try {
             String sql;
             sql = "insert into cliente values (null,'" + cVO.getNome() + "','"
-                    + cVO.getCpf() + "',"
-                    + "null,'"
                     + cVO.getEndereco() + "','"
-                    + cVO.getTelefone() + "')";
+                    + cVO.getTelefone() + "','"
+                    + cVO.getCpf() + "',"
+                    + "null" + ")";
             System.out.println(sql);
             stmt.execute(sql);
         } catch (SQLException e) {
-            throw new SQLException("Erro ao cadastrar cliente Físico!" + e.getMessage());
+            throw new SQLException("Erro ao cadastrar cliente Físico! " + e.getMessage());
         } finally {
-            con.close();
-            stmt.close();
+            Conexao.closeConnection(con, stmt);
         }
     }
 
@@ -70,18 +69,17 @@ public class ClienteDAO {
         Statement stmt = con.createStatement();
         try {
             String sql;
-            sql = "insert into cliente values (null,'" + cVO.getNome() + "',"
-                    + "null,'"
-                    + cVO.getCnpj() + "','"
+            sql = "insert into cliente values (null,'" + cVO.getNome() + "','"
                     + cVO.getEndereco() + "','"
-                    + cVO.getTelefone() + "')";
+                    + cVO.getTelefone() + "',"
+                    + "null" + ",'"
+                    + cVO.getCnpj() + "')";
             System.out.println(sql);
             stmt.execute(sql);
         } catch (SQLException e) {
-            throw new SQLException("Erro ao cadastrar cliente Jurídico!" + e.getMessage());
+            throw new SQLException("Erro ao cadastrar cliente Jurídico! " + e.getMessage());
         } finally {
-            con.close();
-            stmt.close();
+            Conexao.closeConnection(con, stmt);
         }
     }
 
@@ -104,6 +102,54 @@ public class ClienteDAO {
         }
     }
 
+    public Cliente getByDocCPF(String cpf) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        Cliente c = new Cliente();
+        try {
+            String sql;
+            sql = "select * from cliente where cpf = " + cpf;
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                c.setIdcliente(rs.getInt("idcliente"));
+                c.setNome(rs.getString("nome"));
+                c.setEndereco(rs.getString("enderecoCompleto"));
+                c.setTelefone(rs.getString("telefone"));
+                c.setCpf(rs.getString("cpf"));
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Cliente com este CPF não existe. \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+        return c;
+    }
+
+    public Cliente getByDocCNPJ(String cnpj) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        Cliente c = new Cliente();
+        try {
+            String sql;
+            sql = "select * from cliente where cnpj = " + cnpj;
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                c.setIdcliente(rs.getInt("idcliente"));
+                c.setNome(rs.getString("nome"));
+                c.setEndereco(rs.getString("enderecoCompleto"));
+                c.setTelefone(rs.getString("telefone"));
+                c.setCnpj(rs.getString("cnpj"));
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Cliente com este CPNJ não existe. \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+        return c;
+    }
+
     public void deletarCliente(int id) throws SQLException {
         Connection con = Conexao.getConnection();
         Statement stmt = con.createStatement();
@@ -119,6 +165,50 @@ public class ClienteDAO {
         }
     }
 
-    // Ler
-    // Deletar
+    public Boolean verificaCliente(int idcliente) throws SQLException {
+        boolean verCliente = false;
+        try {
+            for (Cliente cli : selectCliente()) {
+                if (cli.getIdcliente() == idcliente) {
+                    verCliente = true;
+                    break;
+                }
+            }
+            return verCliente;
+        } catch (SQLException e) {
+            throw new SQLException("Cliente com este id não existe");
+        }
+    }
+
+    public Cliente pesqCli(int cpfCNPJ, String pesq) throws SQLException {
+        Cliente c = new Cliente();
+        try {
+            switch (cpfCNPJ) {
+                case 1:
+                    for (Cliente cli : selectCliente()) {
+                        if (cli.getCpf() != null && cli.getCpf().equals(pesq)) {
+                            c = cli;
+                            break;
+                        }
+                    }
+                    break;
+                case 2:
+                    for (Cliente cli : selectCliente()) {
+                        if (cli.getCnpj() != null && cli.getCnpj().equals(pesq)) {
+                            c = cli;
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    System.out.println("Cliente não Encontrado!!!");
+                    break;
+            }
+            return c;
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
 }
+
+//  || 

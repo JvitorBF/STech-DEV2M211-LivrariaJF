@@ -5,11 +5,17 @@
  */
 package br.com.senactech.tlivrariaJF.view;
 
+import br.com.senactech.TLivrariaJF.services.EditoraServicos;
+import br.com.senactech.TLivrariaJF.services.LivroServicos;
+import br.com.senactech.TLivrariaJF.services.ServicosFactory;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.senactech.tlivrariaJF.model.Livro;
 import static br.com.senactech.tlivrariaJF.main.TLivrariaJF.cadEditoras;
 import static br.com.senactech.tlivrariaJF.main.TLivrariaJF.cadLivros;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,25 +26,28 @@ public class jfLivro extends javax.swing.JFrame {
     /**
      * Creates new form jfLivro
      */
-    public jfLivro() {
+    public jfLivro() throws SQLException {
         initComponents();
         addRowToTable();
         this.addEditoraJCB();
     }
 
-    public void addEditoraJCB() {
+    public void addEditoraJCB() throws SQLException {
+        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
         jcbEditora.addItem("Selecione");
-        cadEditoras.getEditora().forEach(listEdt -> {
+        editoraS.buscarEditora().forEach(listEdt -> {
             jcbEditora.addItem(listEdt.getNmEditora());
         });
     }
 
-    public void addRowToTable() {
+    public void addRowToTable() throws SQLException {
         DefaultTableModel model = (DefaultTableModel) jtLivros.getModel();
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
         Object rowData[] = new Object[8];//define vetor das colunas
-        for (Livro listLiv : cadLivros.getLivros()) {
+        LivroServicos livroS = ServicosFactory.getLivroServicos();
+        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
+        for (Livro listLiv : livroS.buscarLivro()) {
             rowData[0] = listLiv.getIdLivro();
             rowData[1] = listLiv.getTitulo();
             rowData[2] = listLiv.getAssunto();
@@ -46,10 +55,9 @@ public class jfLivro extends javax.swing.JFrame {
             rowData[4] = listLiv.getIsbn();
             rowData[5] = listLiv.getEstoque();
             rowData[6] = listLiv.getPreco();
-            rowData[7] = cadEditoras.getNomeEdt(listLiv.getIdEditora());
+            rowData[7] = editoraS.getNomeEdt(listLiv.getIdEditora());
             model.addRow(rowData);
         }
-
     }
 
     /**
@@ -87,6 +95,13 @@ public class jfLivro extends javax.swing.JFrame {
         jbDeletar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jcbEditora.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "saraiva" }));
+        jcbEditora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbEditoraActionPerformed(evt);
+            }
+        });
 
         jbSalvar.setText("Salvar");
         jbSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -277,22 +292,27 @@ public class jfLivro extends javax.swing.JFrame {
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         // TODO add your handling code here:
-        Livro liv = new Livro();
+        LivroServicos livroS = ServicosFactory.getLivroServicos();
+        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
+        Livro l = new Livro();
         if (jtfTitulo.getText().isEmpty() && jtfAutor.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencher Titulo e Autor!");
         } else {
-            liv.setIdLivro(cadLivros.addIdLiv());
-            liv.setTitulo(jtfTitulo.getText());
-            liv.setAssunto(jtfAssunto.getText());
-            liv.setAutor(jtfAutor.getText());
-            liv.setIsbn(jtfISBN.getText());
-            liv.setEstoque(Integer.parseInt(jtfEstoque.getText()));
-            liv.setPreco(Float.parseFloat(jtfPreco.getText()));
-            liv.setIdEditora(cadEditoras.getIdEditora(jcbEditora.getSelectedItem().toString()));
-            cadLivros.addLivro(liv);
-            jbLimpar.doClick();
-            this.addRowToTable();
-            JOptionPane.showMessageDialog(this, "Livro " + liv.getTitulo() + " cadastrado com sucesso!");
+            try {               
+                l.setTitulo(jtfTitulo.getText());
+                l.setAssunto(jtfAssunto.getText());
+                l.setAutor(jtfAutor.getText());
+                l.setIsbn(jtfISBN.getText());
+                l.setEstoque(Integer.parseInt(jtfEstoque.getText()));
+                l.setPreco(Float.parseFloat(jtfPreco.getText()));
+                l.setIdEditora(editoraS.getIdEditora(jcbEditora.getSelectedItem().toString()));
+                livroS.cadastrarLivro(l);
+                jbLimpar.doClick();
+                addRowToTable();
+                JOptionPane.showMessageDialog(this, "Livro " + l.getTitulo() + " cadastrado com sucesso!");
+            } catch (SQLException ex) {
+                Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
@@ -303,6 +323,10 @@ public class jfLivro extends javax.swing.JFrame {
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jbEditarActionPerformed
+
+    private void jcbEditoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbEditoraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbEditoraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -334,7 +358,11 @@ public class jfLivro extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jfLivro().setVisible(true);
+                try {
+                    new jfLivro().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

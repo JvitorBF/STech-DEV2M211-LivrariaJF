@@ -37,4 +37,14 @@ public class EditoraServicos {
         eVO.deletarEditora(id);
     }
 
+    public String getNomeEdt(int id) throws SQLException {
+        EditoraDAO eVO = DAOFactory.getEditoraDAO();
+        return eVO.getNomeEdt(id);
+    }
+
+    public int getIdEditora(String nome) throws SQLException {
+        EditoraDAO eVO = DAOFactory.getEditoraDAO();
+        return eVO.getIdEditora(nome);
+    }
+
 }

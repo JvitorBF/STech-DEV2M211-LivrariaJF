@@ -88,7 +88,7 @@ public class LivroDAO {
         }
     }
 
-    public void deletarCliente(int id) throws SQLException {
+    public void deletarLivro(int id) throws SQLException {
         Connection con = Conexao.getConnection();
         Statement stmt = con.createStatement();
 
