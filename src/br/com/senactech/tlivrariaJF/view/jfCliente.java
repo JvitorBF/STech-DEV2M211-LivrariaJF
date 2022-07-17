@@ -10,8 +10,6 @@ import br.com.senactech.TLivrariaJF.services.ServicosFactory;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.senactech.tlivrariaJF.model.Cliente;
-import static br.com.senactech.tlivrariaJF.main.TLivrariaJF.cadClientes;
-import java.security.Provider;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -368,22 +366,23 @@ public class jfCliente extends javax.swing.JFrame {
             CNPJ = (String) jtClientes.getValueAt(linha_da_tabela, 3);
             ClienteServicos clienteS = ServicosFactory.getClienteServicos();
 
-            Cliente cCPF = clienteS.getByDocCPF(CPF);
-            jtfNomeCliente.setText(cCPF.getNome());
-            jtfCpfCnpj.setText(cCPF.getCpf());
-            jtfEndereco.setText(cCPF.getEndereco());
-            jtfTelefone.setText(cCPF.getTelefone());
-            jrbCnpj.setSelected(false);
-            jrbCpf.setSelected(true);
-
-            Cliente cCNPJ = clienteS.getByDocCNPJ(CNPJ);
-            jtfNomeCliente.setText(cCNPJ.getNome());
-            jtfCpfCnpj.setText(cCNPJ.getCnpj());
-            jtfEndereco.setText(cCNPJ.getEndereco());
-            jtfTelefone.setText(cCNPJ.getTelefone());
-            jrbCnpj.setSelected(true);
-            jrbCpf.setSelected(false);
-
+            if ((CPF == null ? CPF == null : CPF.equals(CPF)) && CNPJ == null) {
+                Cliente cCPF = clienteS.getByDocCPF(CPF);
+                jtfNomeCliente.setText(cCPF.getNome());
+                jtfCpfCnpj.setText(cCPF.getCpf());
+                jtfEndereco.setText(cCPF.getEndereco());
+                jtfTelefone.setText(cCPF.getTelefone());
+                jrbCnpj.setSelected(false);
+                jrbCpf.setSelected(true);
+            } else if ((CNPJ == null ? CNPJ == null : CNPJ.equals(CNPJ)) && CPF == null) {
+                Cliente cCNPJ = clienteS.getByDocCNPJ(CNPJ);
+                jtfNomeCliente.setText(cCNPJ.getNome());
+                jtfCpfCnpj.setText(cCNPJ.getCnpj());
+                jtfEndereco.setText(cCNPJ.getEndereco());
+                jtfTelefone.setText(cCNPJ.getTelefone());
+                jrbCnpj.setSelected(true);
+                jrbCpf.setSelected(false);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(jfCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
