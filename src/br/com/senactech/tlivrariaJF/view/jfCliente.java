@@ -79,6 +79,23 @@ public class jfCliente extends javax.swing.JFrame {
         jLabel5.setText("Telefone:");
 
         jtfNomeCliente.setToolTipText("");
+        jtfNomeCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfNomeClienteKeyTyped(evt);
+            }
+        });
+
+        jtfEndereco.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfEnderecoKeyTyped(evt);
+            }
+        });
+
+        jtfTelefone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfTelefoneKeyTyped(evt);
+            }
+        });
 
         jbSalvar.setText("Salvar");
         jbSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -336,12 +353,12 @@ public class jfCliente extends javax.swing.JFrame {
                 clienteS.cadastrarClienteCPF(c);
                 addRowToTableBD();
                 jbLimpar.doClick();
-                JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado com sucesso!");
+                JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
             } else if ((jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
                 clienteS.cadastrarClienteCNPJ(c);
                 addRowToTableBD();
                 jbLimpar.doClick();
-                JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado com sucesso!");
+                JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
             } else {
                 JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
             }
@@ -427,7 +444,7 @@ public class jfCliente extends javax.swing.JFrame {
             try {
                 clienteS.deletarCliente(c.getIdcliente());
                 addRowToTableBD();
-                JOptionPane.showMessageDialog(this, "Cliente deletada com sucesso!",
+                JOptionPane.showMessageDialog(this, "Cliente deletado(a) com sucesso!",
                         ".: Deletar :.", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException ex) {
                 Logger.getLogger(jfCliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -449,13 +466,12 @@ public class jfCliente extends javax.swing.JFrame {
                 } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
                     tPessoa = 2;
                 }
-
                 Cliente c = clienteS.pesqCli(tPessoa, jtfCpfCnpj.getText());
                 c.setNome(jtfNomeCliente.getText());
                 c.setEndereco(jtfEndereco.getText());
                 c.setTelefone(jtfTelefone.getText());
                 System.out.println(c.toString());
-                clienteS.atualizarCliente(c);                
+                clienteS.atualizarCliente(c);
                 addRowToTableBD();
 
                 jbConfirmar.setEnabled(false);
@@ -476,6 +492,30 @@ public class jfCliente extends javax.swing.JFrame {
         }
         jtfCpfCnpj.setEnabled(true);
     }//GEN-LAST:event_jbConfirmarActionPerformed
+
+    private void jtfNomeClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfNomeClienteKeyTyped
+        String caracteres = "0987654321/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfNomeClienteKeyTyped
+
+    private void jtfTelefoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfTelefoneKeyTyped
+        String caracteres = "(-)1234567890";
+        if (caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfTelefoneKeyTyped
+
+    private void jtfEnderecoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfEnderecoKeyTyped
+        String caracteres = "/[]{}=+_)(*&¨%$#@!<>;:?«»ºª";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfEnderecoKeyTyped
 
     private boolean validaImputs() {
         String telefone = jtfTelefone.getText();
