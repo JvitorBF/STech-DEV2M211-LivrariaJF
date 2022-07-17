@@ -90,9 +90,13 @@ public class TLivrariaJF extends JFrame implements ActionListener {
             }
         }
         if ("mEditoras".equals(e.getActionCommand())) {
-            jfEditora ed = new jfEditora();
-            ed.setVisible(true);
-            ed.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            try {
+                jfEditora ed = new jfEditora();
+                ed.setVisible(true);
+                ed.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            } catch (SQLException ex) {
+                Logger.getLogger(TLivrariaJF.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if ("mLivros".equals(e.getActionCommand())) {
             try {

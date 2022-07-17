@@ -67,17 +67,42 @@ public class EditoraDAO {
         Statement stmt = con.createStatement();
         try {
             String sql;
-            sql = "update editora set"
-                    + "nomeEditora = '" + eVO.getNmEditora() + "',"
+            sql = "update editora set "
                     + "endereco = '" + eVO.getEndereco() + "',"
                     + "telefone = '" + eVO.getTelefone() + "',"
-                    + "gerente = '" + eVO.getGerente() + "'";
-            stmt.execute(sql);
+                    + "gerente = '" + eVO.getGerente() + "'"
+                    + "where ideditora = " + eVO.getIdEditora() + "";
+            stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao atualizar editora! " + e.getMessage());
         } finally {
             Conexao.closeConnection(con, stmt);
         }
+    }
+
+    public Editora getByDocID(int id) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stat = con.createStatement();
+        Editora e = new Editora();
+        try {
+            String sql;
+            sql = "select * from editora where ideditora = " + id;
+            ResultSet rs = stat.executeQuery(sql);
+            while (rs.next()) {
+                e.setIdEditora(rs.getInt("ideditora"));
+                e.setNmEditora(rs.getString("nomeEditora"));
+                e.setEndereco(rs.getString("endereco"));
+                e.setTelefone(rs.getString("telefone"));
+                e.setGerente(rs.getString("gerente"));
+            }
+        } catch (SQLException ev) {
+            throw new SQLException("Editora com este id não existe. \n"
+                    + ev.getMessage());
+        } finally {
+            con.close();
+            stat.close();
+        }
+        return e;
     }
 
     public void deletarEditora(int id) throws SQLException {
