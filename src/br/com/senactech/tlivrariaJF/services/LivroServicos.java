@@ -36,4 +36,9 @@ public class LivroServicos {
         LivroDAO lVO = DAOFactory.getLivroDAO();
         lVO.deletarLivro(id);
     }
+
+    public Livro getByDocISBN(String isbn) throws SQLException {
+        LivroDAO lDAO = DAOFactory.getLivroDAO();
+        return lDAO.getByDocISBN(isbn);
+    }
 }

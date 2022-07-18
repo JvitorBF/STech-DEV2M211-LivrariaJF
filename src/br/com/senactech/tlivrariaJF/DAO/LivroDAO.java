@@ -102,4 +102,31 @@ public class LivroDAO {
             Conexao.closeConnection(con, stmt);
         }
     }
+
+    public Livro getByDocISBN(String isbn) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        Livro l = new Livro();
+        try {
+            String sql;
+            sql = "select * from livro where isbn = " + isbn;
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                l.setIdLivro(rs.getInt("idlivro"));
+                l.setTitulo(rs.getString("tituloLivro"));
+                l.setIsbn(rs.getString("isbn"));
+                l.setAssunto(rs.getString("assunto"));
+                l.setAutor(rs.getString("autor"));
+                l.setEstoque(rs.getInt("estoque"));
+                l.setPreco(rs.getFloat("valor"));
+                l.setIdEditora(rs.getInt("ideditora"));
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Livro com este ISBN não existe. \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+        return l;
+    }
 }

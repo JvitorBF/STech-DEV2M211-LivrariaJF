@@ -94,12 +94,6 @@ public final class jfLivro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jcbEditora.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbEditoraActionPerformed(evt);
-            }
-        });
-
         jbSalvar.setText("Salvar");
         jbSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,9 +214,19 @@ public final class jfLivro extends javax.swing.JFrame {
 
         jbConfirmar.setText("Confirmar");
         jbConfirmar.setEnabled(false);
+        jbConfirmar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbConfirmarActionPerformed(evt);
+            }
+        });
 
         jbDeletar.setText("Deletar");
         jbDeletar.setEnabled(false);
+        jbDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbDeletarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -385,14 +389,6 @@ public final class jfLivro extends javax.swing.JFrame {
         jtfISBN.setEnabled(true);
     }//GEN-LAST:event_jbLimparActionPerformed
 
-    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbEditarActionPerformed
-
-    private void jcbEditoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbEditoraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jcbEditoraActionPerformed
-
     private void jtfTituloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfTituloKeyTyped
         String caracteres = "0987654321/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
         if (!caracteres.contains(evt.getKeyChar() + "")) {
@@ -451,6 +447,43 @@ public final class jfLivro extends javax.swing.JFrame {
         jbSalvar.setEnabled(false);
         jbLimpar.setText("Cancelar");
     }//GEN-LAST:event_jtLivrosMouseClicked
+
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+        try {
+            jbDeletar.setEnabled(false);
+            jbSalvar.setEnabled(false);
+            jbEditar.setEnabled(false);
+            jtfISBN.setEnabled(false);
+            jbConfirmar.setEnabled(true);
+            jbLimpar.setText("Cancelar");
+
+            int linha_da_tabela;
+            String isbn;
+            linha_da_tabela = jtLivros.getSelectedRow();
+            isbn = (String) jtLivros.getValueAt(linha_da_tabela, 4);
+            LivroServicos livroS = ServicosFactory.getLivroServicos();
+            EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
+            Livro l = livroS.getByDocISBN(isbn);
+
+            jtfTitulo.setText(l.getTitulo());
+            jtfAssunto.setText(l.getAssunto());
+            jtfAutor.setText(l.getAutor());
+            jtfISBN.setText(l.getIsbn());
+            jtfEstoque.setText(Integer.toString(l.getEstoque()));
+            jtfPreco.setText(Float.toString(l.getPreco()));
+            jcbEditora.setSelectedItem(editoraS.getNomeEdt(l.getIdEditora()));
+        } catch (SQLException ex) {
+            Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbEditarActionPerformed
+
+    private void jbConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConfirmarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbConfirmarActionPerformed
+
+    private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbDeletarActionPerformed
 
     private boolean validaImputs() {
         if (jtfTitulo.getText().isBlank()
