@@ -6,7 +6,11 @@
 package br.com.senactech.TLivrariaJF.DAO;
 
 import br.com.senactech.TLivrariaJF.conexao.Conexao;
+import br.com.senactech.TLivrariaJF.services.EditoraServicos;
+import br.com.senactech.TLivrariaJF.services.LivroServicos;
+import br.com.senactech.TLivrariaJF.services.ServicosFactory;
 import br.com.senactech.tlivrariaJF.model.Editora;
+import br.com.senactech.tlivrariaJF.model.Livro;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

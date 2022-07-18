@@ -8,12 +8,15 @@ package br.com.senactech.tlivrariaJF.view;
 import br.com.senactech.TLivrariaJF.services.EditoraServicos;
 import br.com.senactech.TLivrariaJF.services.LivroServicos;
 import br.com.senactech.TLivrariaJF.services.ServicosFactory;
+import br.com.senactech.tlivrariaJF.model.Editora;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.senactech.tlivrariaJF.model.Livro;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -167,11 +170,6 @@ public final class jfLivro extends javax.swing.JFrame {
             }
         });
 
-        jtfISBN.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jtfISBNFocusLost(evt);
-            }
-        });
         jtfISBN.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jtfISBNKeyTyped(evt);
@@ -372,6 +370,13 @@ public final class jfLivro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
+    public void jTableFilterClear() {
+        DefaultTableModel model = (DefaultTableModel) jtLivros.getModel();
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+        jtLivros.setRowSorter(sorter);
+        sorter.setRowFilter(null);
+    }
+
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
         jtfTitulo.setText("");
         jtfAssunto.setText("");
@@ -379,6 +384,7 @@ public final class jfLivro extends javax.swing.JFrame {
         jtfISBN.setText("");
         jtfPreco.setText("");
         jtfEstoque.setText("");
+        jbLimpar.setText("Limpar");
         jcbEditora.setSelectedIndex(0);
         jtfTitulo.requestFocus();
 
@@ -387,6 +393,9 @@ public final class jfLivro extends javax.swing.JFrame {
         jbConfirmar.setEnabled(false);
         jbDeletar.setEnabled(false);
         jtfISBN.setEnabled(true);
+        jcbEditora.setEnabled(true);
+
+        jTableFilterClear();
     }//GEN-LAST:event_jbLimparActionPerformed
 
     private void jtfTituloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfTituloKeyTyped
@@ -437,10 +446,6 @@ public final class jfLivro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtfPrecoKeyTyped
 
-    private void jtfISBNFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfISBNFocusLost
-
-    }//GEN-LAST:event_jtfISBNFocusLost
-
     private void jtLivrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtLivrosMouseClicked
         jbEditar.setEnabled(true);
         jbDeletar.setEnabled(true);
@@ -454,6 +459,7 @@ public final class jfLivro extends javax.swing.JFrame {
             jbSalvar.setEnabled(false);
             jbEditar.setEnabled(false);
             jtfISBN.setEnabled(false);
+            jcbEditora.setEnabled(false);
             jbConfirmar.setEnabled(true);
             jbLimpar.setText("Cancelar");
 
@@ -478,11 +484,67 @@ public final class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConfirmarActionPerformed
-        // TODO add your handling code here:
+        if (validaImputs()) {
+            try {
+                LivroServicos livroS = ServicosFactory.getLivroServicos();
+                Livro l = livroS.getByDocISBN(jtfISBN.getText());
+                l.setTitulo(jtfTitulo.getText());
+                l.setAssunto(jtfAssunto.getText());
+                l.setAutor(jtfAutor.getText());
+                l.setEstoque(Integer.parseInt(jtfEstoque.getText()));
+                l.setPreco(Float.parseFloat(jtfPreco.getText()));
+                livroS.atualizarLivro(l);
+                addRowToTable();
+                jbConfirmar.setEnabled(false);
+                jbSalvar.setEnabled(true);
+                jbLimpar.setEnabled(true);
+
+                jbLimpar.doClick();
+                jbLimpar.setText("Limpar");
+
+                String msg = "Dados atualizado com sucesso!";
+                JOptionPane.showMessageDialog(this, msg, ".: Atualizar :.", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException ex) {
+                Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            jbLimpar.doClick();
+            jcbEditora.setEnabled(true);
+            jtfISBN.setEnabled(true);
+        }
+        jtfISBN.setEnabled(true);
+        jcbEditora.setEnabled(true);
     }//GEN-LAST:event_jbConfirmarActionPerformed
 
     private void jbDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDeletarActionPerformed
-        // TODO add your handling code here:
+        try {
+            jbEditar.setEnabled(false);
+            int linha_da_tabela;
+            int id;
+            linha_da_tabela = jtLivros.getSelectedRow();
+            id = (int) jtLivros.getValueAt(linha_da_tabela, 0);
+            System.out.println(id);
+            LivroServicos livroS = ServicosFactory.getLivroServicos();
+            Livro l = new Livro();
+            l = livroS.getByDocID(id);
+
+            Object[] resp = {"Sim", "Não"};
+            int resposta = JOptionPane.showOptionDialog(this,
+                    "Deseja realmente deletar " + l.getTitulo() + "?",
+                    ".: Deletar :.", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE, null, resp, resp[0]);
+            if (resposta == 0) {
+                livroS.deletarLivro(l.getIdLivro());
+                addRowToTable();
+                JOptionPane.showMessageDialog(this, "Livro deletado com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Entendemos sua decisão!",
+                        ".: Deletar :.", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(jfEditora.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jbDeletar.setEnabled(false);
     }//GEN-LAST:event_jbDeletarActionPerformed
 
     private boolean validaImputs() {

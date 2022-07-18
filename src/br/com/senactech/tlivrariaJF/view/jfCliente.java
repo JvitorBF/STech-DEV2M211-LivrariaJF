@@ -13,6 +13,8 @@ import br.com.senactech.tlivrariaJF.model.Cliente;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -280,6 +282,7 @@ public class jfCliente extends javax.swing.JFrame {
         jtfCpfCnpj.setText("");
         jtfEndereco.setText("");
         jtfTelefone.setText("");
+        jbLimpar.setText("Limpar");
         bgCpfCnpj.clearSelection();
         jtfNomeCliente.requestFocus();
 
@@ -289,6 +292,8 @@ public class jfCliente extends javax.swing.JFrame {
         jbDeletar.setEnabled(false);
         jrbCpf.setEnabled(true);
         jrbCnpj.setEnabled(true);
+
+        jTableFilterClear();
     }//GEN-LAST:event_jbLimparActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
@@ -313,6 +318,12 @@ public class jfCliente extends javax.swing.JFrame {
         }
     }
 
+    public void jTableFilterClear() {
+        DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+        jtClientes.setRowSorter(sorter);
+        sorter.setRowFilter(null);
+    }
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         try {

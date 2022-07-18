@@ -73,14 +73,13 @@ public class LivroDAO {
         Statement stmt = con.createStatement();
         try {
             String sql;
-            sql = "update livro set"
+            sql = "update livro set "
                     + "tituloLivro = '" + lVO.getTitulo() + "',"
                     + "autor = '" + lVO.getAutor() + "',"
                     + "assunto = '" + lVO.getAssunto() + "',"
-                    + "isbn = '" + lVO.getIsbn() + "',"
                     + "estoque = " + lVO.getEstoque() + ","
                     + "valor = " + lVO.getPreco() + "";
-            stmt.execute(sql);
+            stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao atualizar livro! " + e.getMessage());
         } finally {
@@ -123,6 +122,33 @@ public class LivroDAO {
             }
         } catch (SQLException e) {
             throw new SQLException("Livro com este ISBN não existe. \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+        return l;
+    }
+
+    public Livro getByDocID(int id) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        Livro l = new Livro();
+        try {
+            String sql;
+            sql = "select * from livro where idlivro = " + id;
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                l.setIdLivro(rs.getInt("idlivro"));
+                l.setTitulo(rs.getString("tituloLivro"));
+                l.setIsbn(rs.getString("isbn"));
+                l.setAssunto(rs.getString("assunto"));
+                l.setAutor(rs.getString("autor"));
+                l.setEstoque(rs.getInt("estoque"));
+                l.setPreco(rs.getFloat("valor"));
+                l.setIdEditora(rs.getInt("ideditora"));
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Livro com este ID não existe. \n"
                     + e.getMessage());
         } finally {
             Conexao.closeConnection(con, stmt);

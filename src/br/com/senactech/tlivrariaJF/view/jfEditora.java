@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -43,6 +45,13 @@ public final class jfEditora extends javax.swing.JFrame {
             rowData[4] = listEdt.getGerente();
             model.addRow(rowData);
         }
+    }
+
+    public void jTableFilterClear() {
+        DefaultTableModel model = (DefaultTableModel) jtEditora.getModel();
+        final TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+        jtEditora.setRowSorter(sorter);
+        sorter.setRowFilter(null);
     }
 
     public boolean validaInputs() {
@@ -340,6 +349,8 @@ public final class jfEditora extends javax.swing.JFrame {
         jbConfirmar.setEnabled(false);
         jbDeletar.setEnabled(false);
         jbSair.setEnabled(true);
+
+        jTableFilterClear();
     }//GEN-LAST:event_jbLimparActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
