@@ -11,8 +11,6 @@ import br.com.senactech.TLivrariaJF.services.ServicosFactory;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.senactech.tlivrariaJF.model.Livro;
-import static br.com.senactech.tlivrariaJF.main.TLivrariaJF.cadEditoras;
-import static br.com.senactech.tlivrariaJF.main.TLivrariaJF.cadLivros;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author jairb
  */
-public class jfLivro extends javax.swing.JFrame {
+public final class jfLivro extends javax.swing.JFrame {
 
     /**
      * Creates new form jfLivro
@@ -34,7 +32,7 @@ public class jfLivro extends javax.swing.JFrame {
 
     public void addEditoraJCB() throws SQLException {
         EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
-        jcbEditora.addItem("Selecione");
+        jcbEditora.addItem("Selecione...");
         editoraS.buscarEditora().forEach(listEdt -> {
             jcbEditora.addItem(listEdt.getNmEditora());
         });
@@ -79,7 +77,7 @@ public class jfLivro extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jlEditora = new javax.swing.JLabel();
         jtfTitulo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtLivros = new javax.swing.JTable();
@@ -89,14 +87,13 @@ public class jfLivro extends javax.swing.JFrame {
         jtfEstoque = new javax.swing.JTextField();
         jtfPreco = new javax.swing.JTextField();
         jbLimpar = new javax.swing.JButton();
-        jbCancelar = new javax.swing.JButton();
+        jbSair = new javax.swing.JButton();
         jbEditar = new javax.swing.JButton();
         jbConfirmar = new javax.swing.JButton();
         jbDeletar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jcbEditora.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "saraiva" }));
         jcbEditora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbEditoraActionPerformed(evt);
@@ -126,7 +123,13 @@ public class jfLivro extends javax.swing.JFrame {
 
         jLabel7.setText("Preço");
 
-        jLabel8.setText("Editora");
+        jlEditora.setText("Editora");
+
+        jtfTitulo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfTituloKeyTyped(evt);
+            }
+        });
 
         jtLivros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -139,12 +142,59 @@ public class jfLivro extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtLivros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtLivrosMouseClicked(evt);
+            }
         });
         jScrollPane1.setViewportView(jtLivros);
+
+        jtfAssunto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfAssuntoKeyTyped(evt);
+            }
+        });
+
+        jtfAutor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfAutorKeyTyped(evt);
+            }
+        });
+
+        jtfISBN.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfISBNFocusLost(evt);
+            }
+        });
+        jtfISBN.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfISBNKeyTyped(evt);
+            }
+        });
+
+        jtfEstoque.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfEstoqueKeyTyped(evt);
+            }
+        });
+
+        jtfPreco.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfPrecoKeyTyped(evt);
+            }
+        });
 
         jbLimpar.setText("Limpar");
         jbLimpar.addActionListener(new java.awt.event.ActionListener() {
@@ -153,14 +203,15 @@ public class jfLivro extends javax.swing.JFrame {
             }
         });
 
-        jbCancelar.setText("Cancelar");
-        jbCancelar.addActionListener(new java.awt.event.ActionListener() {
+        jbSair.setText("Sair");
+        jbSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbCancelarActionPerformed(evt);
+                jbSairActionPerformed(evt);
             }
         });
 
         jbEditar.setText("Editar");
+        jbEditar.setEnabled(false);
         jbEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbEditarActionPerformed(evt);
@@ -168,8 +219,10 @@ public class jfLivro extends javax.swing.JFrame {
         });
 
         jbConfirmar.setText("Confirmar");
+        jbConfirmar.setEnabled(false);
 
         jbDeletar.setText("Deletar");
+        jbDeletar.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -207,7 +260,7 @@ public class jfLivro extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
+                                        .addComponent(jlEditora)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(jcbEditora, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jtfAutor)))
@@ -221,7 +274,7 @@ public class jfLivro extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jbDeletar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbCancelar)
+                                .addComponent(jbSair, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(3, 3, 3))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jbSalvar)
@@ -248,7 +301,7 @@ public class jfLivro extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jtfISBN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(jlEditora))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -267,7 +320,7 @@ public class jfLivro extends javax.swing.JFrame {
                     .addComponent(jbEditar)
                     .addComponent(jbConfirmar)
                     .addComponent(jbDeletar)
-                    .addComponent(jbCancelar))
+                    .addComponent(jbSair))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -285,20 +338,19 @@ public class jfLivro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
+    private void jbSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSairActionPerformed
         // TODO add your handling code here:
         jfLivro.this.dispose();
-    }//GEN-LAST:event_jbCancelarActionPerformed
+    }//GEN-LAST:event_jbSairActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        // TODO add your handling code here:
-        LivroServicos livroS = ServicosFactory.getLivroServicos();
-        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
-        Livro l = new Livro();
-        if (jtfTitulo.getText().isEmpty() && jtfAutor.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencher Titulo e Autor!");
-        } else {
-            try {               
+        // TODO add your handling code here:        
+        if (validaImputs()) {
+            try {
+                LivroServicos livroS = ServicosFactory.getLivroServicos();
+                EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
+                Livro l = new Livro();
+
                 l.setTitulo(jtfTitulo.getText());
                 l.setAssunto(jtfAssunto.getText());
                 l.setAutor(jtfAutor.getText());
@@ -317,7 +369,20 @@ public class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
-        // TODO add your handling code here:
+        jtfTitulo.setText("");
+        jtfAssunto.setText("");
+        jtfAutor.setText("");
+        jtfISBN.setText("");
+        jtfPreco.setText("");
+        jtfEstoque.setText("");
+        jcbEditora.setSelectedIndex(0);
+        jtfTitulo.requestFocus();
+
+        jbSalvar.setEnabled(true);
+        jbEditar.setEnabled(false);
+        jbConfirmar.setEnabled(false);
+        jbDeletar.setEnabled(false);
+        jtfISBN.setEnabled(true);
     }//GEN-LAST:event_jbLimparActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
@@ -327,6 +392,81 @@ public class jfLivro extends javax.swing.JFrame {
     private void jcbEditoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbEditoraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbEditoraActionPerformed
+
+    private void jtfTituloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfTituloKeyTyped
+        String caracteres = "0987654321/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfTituloKeyTyped
+
+    private void jtfAutorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfAutorKeyTyped
+        String caracteres = "0987654321/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfAutorKeyTyped
+
+    private void jtfISBNKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfISBNKeyTyped
+        String caracteres = "-1234567890";
+        if (caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfISBNKeyTyped
+
+    private void jtfAssuntoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfAssuntoKeyTyped
+        String caracteres = "0987654321/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfAssuntoKeyTyped
+
+    private void jtfEstoqueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfEstoqueKeyTyped
+        String caracteres = "1234567890";
+        if (caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfEstoqueKeyTyped
+
+    private void jtfPrecoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfPrecoKeyTyped
+        String caracteres = ",1234567890";
+        if (caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfPrecoKeyTyped
+
+    private void jtfISBNFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfISBNFocusLost
+
+    }//GEN-LAST:event_jtfISBNFocusLost
+
+    private void jtLivrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtLivrosMouseClicked
+        jbEditar.setEnabled(true);
+        jbDeletar.setEnabled(true);
+        jbSalvar.setEnabled(false);
+        jbLimpar.setText("Cancelar");
+    }//GEN-LAST:event_jtLivrosMouseClicked
+
+    private boolean validaImputs() {
+        if (jtfTitulo.getText().isBlank()
+                || jtfAutor.getText().isBlank()
+                || jtfAssunto.getText().isBlank()
+                || jtfISBN.getText().isBlank()
+                || jtfEstoque.getText().isBlank()
+                || jtfPreco.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this,
+                    "Todos os campos devem ser preenchidos!",
+                    ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+            jtfTitulo.requestFocus();
+            return false;
+        }
+        return true;
+    }
 
     /**
      * @param args the command line arguments
@@ -375,16 +515,16 @@ public class jfLivro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbCancelar;
     private javax.swing.JButton jbConfirmar;
     private javax.swing.JButton jbDeletar;
     private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbLimpar;
+    private javax.swing.JButton jbSair;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JComboBox<String> jcbEditora;
+    private javax.swing.JLabel jlEditora;
     private javax.swing.JTable jtLivros;
     private javax.swing.JTextField jtfAssunto;
     private javax.swing.JTextField jtfAutor;
