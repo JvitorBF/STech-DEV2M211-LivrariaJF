@@ -7,6 +7,8 @@ package br.com.senactech.tlivrariaJF.view;
 
 import br.com.senactech.TLivrariaJF.services.ClienteServicos;
 import br.com.senactech.TLivrariaJF.services.ServicosFactory;
+import br.com.senactech.TLivrariaJF.util.ValidaCNPJ;
+import br.com.senactech.TLivrariaJF.util.ValidaCPF;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.senactech.tlivrariaJF.model.Cliente;
@@ -332,55 +334,56 @@ public class jfCliente extends javax.swing.JFrame {
     }
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        try {
-            // TODO add your handling code here:
-            ClienteServicos clienteS = ServicosFactory.getClienteServicos();
-            Cliente c = new Cliente();
-            c.setNome(jtfNomeCliente.getText());
-            c.setTelefone(jtfTelefone.getText());
-            c.setEndereco(jtfEndereco.getText());
-            boolean doc = false;
+        if (validaImputs()) {
+            try {
+                // TODO add your handling code here:
+                ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+                Cliente c = new Cliente();
+                c.setNome(jtfNomeCliente.getText());
+                c.setTelefone(jtfTelefone.getText());
+                c.setEndereco(jtfEndereco.getText());
+                boolean doc = false;
 
-            int tPessoa = 0;
-            if (jrbCpf.isSelected() && !jrbCnpj.isSelected()) {
-                tPessoa = 1;
-            } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
-                tPessoa = 2;
-            } else {
-                JOptionPane.showMessageDialog(this, "Selecione tipo de cliente.");
+                int tPessoa = 0;
+                if (jrbCpf.isSelected() && !jrbCnpj.isSelected()) {
+                    tPessoa = 1;
+                } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
+                    tPessoa = 2;
+                }
+
+                Cliente cliCpfCnpj;
+                cliCpfCnpj = clienteS.pesqCli(tPessoa, jtfCpfCnpj.getText());
+                if (jrbCpf.isSelected() && cliCpfCnpj.getCpf() == null) {
+                    c.setCpf(jtfCpfCnpj.getText());
+                    c.setCnpj(null);
+                    doc = false;
+                } else if (jrbCnpj.isSelected() && cliCpfCnpj.getCnpj() == null) {
+                    c.setCpf(null);
+                    c.setCnpj(jtfCpfCnpj.getText());
+                    doc = false;
+                }
+                if (clienteS.verificaCliente(cliCpfCnpj.getIdcliente())) {
+                    JOptionPane.showMessageDialog(this, "Este documento já existe!"
+                            + "\nTente novamente!!!");
+                    doc = true;
+                }
+                //Cadastro a partir das validações
+                if ((jrbCpf.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
+                    clienteS.cadastrarClienteCPF(c);
+                    addRowToTableBD();
+                    jbLimpar.doClick();
+                    JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
+                } else if ((jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
+                    clienteS.cadastrarClienteCNPJ(c);
+                    addRowToTableBD();
+                    jbLimpar.doClick();
+                    JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(jfCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Cliente cliCpfCnpj;
-            cliCpfCnpj = clienteS.pesqCli(tPessoa, jtfCpfCnpj.getText());
-            if (jrbCpf.isSelected() && cliCpfCnpj.getCpf() == null) {
-                c.setCpf(jtfCpfCnpj.getText());
-                c.setCnpj(null);
-                doc = false;
-            } else if (jrbCnpj.isSelected() && cliCpfCnpj.getCnpj() == null) {
-                c.setCpf(null);
-                c.setCnpj(jtfCpfCnpj.getText());
-                doc = false;
-            }
-            if (clienteS.verificaCliente(cliCpfCnpj.getIdcliente())) {
-                JOptionPane.showMessageDialog(this, "Este documento já existe!"
-                        + "\nTente novamente!!!");
-                doc = true;
-            }
-            //Cadastro a partir das validações
-            if ((jrbCpf.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
-                clienteS.cadastrarClienteCPF(c);
-                addRowToTableBD();
-                jbLimpar.doClick();
-                JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
-            } else if ((jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
-                clienteS.cadastrarClienteCNPJ(c);
-                addRowToTableBD();
-                jbLimpar.doClick();
-                JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(jfCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
@@ -535,7 +538,25 @@ public class jfCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jtfEnderecoKeyTyped
 
     private void jtfCpfCnpjFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfCpfCnpjFocusLost
-        
+        if (jrbCpf.isSelected() && !jrbCnpj.isSelected()) {
+            if (!jtfCpfCnpj.getText().isBlank()) {
+                if (!ValidaCPF.isCPF(jtfCpfCnpj.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CPF informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCpfCnpj.requestFocus();
+                }
+            }
+        } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
+            if (!jtfCpfCnpj.getText().isBlank()) {
+                if (!ValidaCNPJ.isCNPJ(jtfCpfCnpj.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CNPJ informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCpfCnpj.requestFocus();
+                }
+            }
+        }
     }//GEN-LAST:event_jtfCpfCnpjFocusLost
 
     private boolean validaImputs() {
