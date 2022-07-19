@@ -62,4 +62,13 @@ public class ClienteServicos {
         return cVO.getByDocCNPJ(cnpj);
     }
 
+    public boolean verCPF(String cpf) throws SQLException {
+        ClienteDAO cDAO = DAOFactory.getClienteDAO();
+        return cDAO.verCPF(cpf);
+    }
+
+    public boolean verCNPJ(String cnpj) throws SQLException {
+        ClienteDAO cDAO = DAOFactory.getClienteDAO();
+        return cDAO.verCNPJ(cnpj);
+    }
 }

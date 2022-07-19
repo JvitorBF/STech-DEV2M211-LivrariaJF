@@ -164,6 +164,48 @@ public class ClienteDAO {
         }
     }
 
+    public Boolean verCPF(String cpf) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stat = con.createStatement();
+        boolean verCPF = false;
+
+        try {
+            String sql;
+            sql = "select cpf from cliente where cpf = " + cpf;
+            ResultSet rs = stat.executeQuery(sql);
+            while (rs.next()) {
+                verCPF = rs.wasNull();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Cliente com este CPF não existe. \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stat);
+        }
+        return verCPF;
+    }
+
+    public Boolean verCNPJ(String cnpj) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stat = con.createStatement();
+        boolean verCNPJ = false;
+
+        try {
+            String sql;
+            sql = "select cnpj from cliente where cnpj = " + cnpj;
+            ResultSet rs = stat.executeQuery(sql);
+            while (rs.next()) {
+                verCNPJ = rs.wasNull();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Cliente com este CNPJ não existe. \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stat);
+        }
+        return verCNPJ;
+    }
+
     public Boolean verificaCliente(int idcliente) throws SQLException {
         boolean verCliente = false;
         try {

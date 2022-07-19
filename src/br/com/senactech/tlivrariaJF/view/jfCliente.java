@@ -87,6 +87,12 @@ public class jfCliente extends javax.swing.JFrame {
             }
         });
 
+        jtfCpfCnpj.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfCpfCnpjFocusLost(evt);
+            }
+        });
+
         jtfEndereco.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jtfEnderecoKeyTyped(evt);
@@ -527,6 +533,10 @@ public class jfCliente extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_jtfEnderecoKeyTyped
+
+    private void jtfCpfCnpjFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfCpfCnpjFocusLost
+        
+    }//GEN-LAST:event_jtfCpfCnpjFocusLost
 
     private boolean validaImputs() {
         String telefone = jtfTelefone.getText();
