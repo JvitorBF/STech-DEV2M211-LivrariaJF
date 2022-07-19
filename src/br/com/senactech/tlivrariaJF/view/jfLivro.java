@@ -170,6 +170,11 @@ public final class jfLivro extends javax.swing.JFrame {
             }
         });
 
+        jtfISBN.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfISBNFocusLost(evt);
+            }
+        });
         jtfISBN.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jtfISBNKeyTyped(evt);
@@ -478,6 +483,7 @@ public final class jfLivro extends javax.swing.JFrame {
             jtfEstoque.setText(Integer.toString(l.getEstoque()));
             jtfPreco.setText(Float.toString(l.getPreco()));
             jcbEditora.setSelectedItem(editoraS.getNomeEdt(l.getIdEditora()));
+            jlEditora.setText(editoraS.getNomeEdt(l.getIdEditora()));
         } catch (SQLException ex) {
             Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -546,6 +552,10 @@ public final class jfLivro extends javax.swing.JFrame {
         }
         jbDeletar.setEnabled(false);
     }//GEN-LAST:event_jbDeletarActionPerformed
+
+    private void jtfISBNFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfISBNFocusLost
+
+    }//GEN-LAST:event_jtfISBNFocusLost
 
     private boolean validaImputs() {
         if (jtfTitulo.getText().isBlank()
