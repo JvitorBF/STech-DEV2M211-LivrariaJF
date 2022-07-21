@@ -15,6 +15,7 @@ import br.com.senactech.tlivrariaJF.model.Cliente;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -23,6 +24,8 @@ import javax.swing.table.TableRowSorter;
  * @author jairb
  */
 public class jfCliente extends javax.swing.JFrame {
+
+    JButton btnClick = null;
 
     /**
      * Creates new form jfCliente
@@ -92,6 +95,11 @@ public class jfCliente extends javax.swing.JFrame {
         jtfCpfCnpj.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jtfCpfCnpjFocusLost(evt);
+            }
+        });
+        jtfCpfCnpj.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfCpfCnpjKeyTyped(evt);
             }
         });
 
@@ -334,6 +342,8 @@ public class jfCliente extends javax.swing.JFrame {
     }
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
+        btnClick = (JButton) evt.getSource();
+
         if (validaImputs()) {
             try {
                 // TODO add your handling code here:
@@ -342,38 +352,14 @@ public class jfCliente extends javax.swing.JFrame {
                 c.setNome(jtfNomeCliente.getText());
                 c.setTelefone(jtfTelefone.getText());
                 c.setEndereco(jtfEndereco.getText());
-                boolean doc = false;
 
-                int tPessoa = 0;
-                if (jrbCpf.isSelected() && !jrbCnpj.isSelected()) {
-                    tPessoa = 1;
-                } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
-                    tPessoa = 2;
-                }
-
-                Cliente cliCpfCnpj;
-                cliCpfCnpj = clienteS.pesqCli(tPessoa, jtfCpfCnpj.getText());
-                if (jrbCpf.isSelected() && cliCpfCnpj.getCpf() == null) {
-                    c.setCpf(jtfCpfCnpj.getText());
-                    c.setCnpj(null);
-                    doc = false;
-                } else if (jrbCnpj.isSelected() && cliCpfCnpj.getCnpj() == null) {
-                    c.setCpf(null);
-                    c.setCnpj(jtfCpfCnpj.getText());
-                    doc = false;
-                }
-                if (clienteS.verificaCliente(cliCpfCnpj.getIdcliente())) {
-                    JOptionPane.showMessageDialog(this, "Este documento já existe!"
-                            + "\nTente novamente!!!");
-                    doc = true;
-                }
                 //Cadastro a partir das validações
-                if ((jrbCpf.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
+                if ((jrbCpf.isSelected()) && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
                     clienteS.cadastrarClienteCPF(c);
                     addRowToTableBD();
                     jbLimpar.doClick();
                     JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
-                } else if ((jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
+                } else if ((jrbCnpj.isSelected()) && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
                     clienteS.cadastrarClienteCNPJ(c);
                     addRowToTableBD();
                     jbLimpar.doClick();
@@ -559,6 +545,14 @@ public class jfCliente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtfCpfCnpjFocusLost
 
+    private void jtfCpfCnpjKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCpfCnpjKeyTyped
+        String caracteres = "-.1234567890";
+        if (caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfCpfCnpjKeyTyped
+
     private boolean validaImputs() {
         String telefone = jtfTelefone.getText();
         if (jtfNomeCliente.getText().isBlank()
@@ -577,6 +571,46 @@ public class jfCliente extends javax.swing.JFrame {
                     ".: Erro :.", JOptionPane.ERROR_MESSAGE);
             jtfTelefone.requestFocus();
             return false;
+        }
+        if ("Salvar".equals(btnClick.getText())) {
+            ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+            if (!jrbCnpj.isSelected()) {
+                if (!ValidaCPF.isCPF(jtfCpfCnpj.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CPF informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCpfCnpj.requestFocus();
+                    return false;
+                } else try {
+                    if (!clienteS.verCPF(jtfCpfCnpj.getText())) {
+                        JOptionPane.showMessageDialog(this,
+                                "CPF já cadastrado!!!",
+                                ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                        jtfCpfCnpj.requestFocus();
+                        return false;
+                    }
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, null);
+                }
+            } else if (!jrbCpf.isSelected()) {
+                if (!ValidaCNPJ.isCNPJ(jtfCpfCnpj.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CNPJ informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCpfCnpj.requestFocus();
+                    return false;
+                } else try {
+                    if (!clienteS.verCNPJ(jtfCpfCnpj.getText())) {
+                        JOptionPane.showMessageDialog(this,
+                                "CNPJ já cadastrado!!!",
+                                ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                        jtfCpfCnpj.requestFocus();
+                        return false;
+                    }
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, null);
+                }
+            }
         }
         return true;
     }
