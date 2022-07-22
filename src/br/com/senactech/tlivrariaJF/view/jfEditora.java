@@ -12,6 +12,7 @@ import br.com.senactech.tlivrariaJF.model.Editora;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -22,6 +23,8 @@ import javax.swing.table.TableRowSorter;
  * @author jairb
  */
 public final class jfEditora extends javax.swing.JFrame {
+
+    JButton btnClick = null;
 
     /**
      * Creates new form jfEditora
@@ -55,6 +58,7 @@ public final class jfEditora extends javax.swing.JFrame {
     }
 
     public boolean validaInputs() {
+        EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
         String telefone = jtfTelefone.getText().toUpperCase();
         if (jtfNomeEditora.getText().isBlank()
                 || jtfEndereco.getText().isBlank()
@@ -72,6 +76,19 @@ public final class jfEditora extends javax.swing.JFrame {
                     ".: Erro :.", JOptionPane.ERROR_MESSAGE);
             jtfTelefone.requestFocus();
             return false;
+        }
+        if ("Salvar".equals(btnClick.getText())) {
+            try {
+                if (!editoraS.verNomeEd(jtfNomeEditora.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "Nome editora já cadastrado!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfNomeEditora.requestFocus();
+                    return false;
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, null);
+            }
         }
         return true;
     }
@@ -114,11 +131,6 @@ public final class jfEditora extends javax.swing.JFrame {
             }
         });
 
-        jtfNomeEditora.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jtfNomeEditoraFocusLost(evt);
-            }
-        });
         jtfNomeEditora.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jtfNomeEditoraKeyTyped(evt);
@@ -146,6 +158,12 @@ public final class jfEditora extends javax.swing.JFrame {
         jtfTelefone.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jtfTelefoneKeyTyped(evt);
+            }
+        });
+
+        jtfGerente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfGerenteKeyTyped(evt);
             }
         });
 
@@ -225,9 +243,7 @@ public final class jfEditora extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSeparator2)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jSeparator2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -260,6 +276,7 @@ public final class jfEditora extends javax.swing.JFrame {
                                     .addComponent(jtfGerente)
                                     .addComponent(jtfEndereco))))
                         .addContainerGap())))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jbConfirmar, jbDeletar, jbEditar, jbSair});
@@ -267,9 +284,8 @@ public final class jfEditora extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -310,6 +326,8 @@ public final class jfEditora extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
+        btnClick = (JButton) evt.getSource();
+
         if (validaInputs()) {
             try {
                 EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
@@ -349,6 +367,7 @@ public final class jfEditora extends javax.swing.JFrame {
         jbConfirmar.setEnabled(false);
         jbDeletar.setEnabled(false);
         jbSair.setEnabled(true);
+        jtfNomeEditora.setEnabled(true);
 
         jTableFilterClear();
     }//GEN-LAST:event_jbLimparActionPerformed
@@ -419,7 +438,8 @@ public final class jfEditora extends javax.swing.JFrame {
             linha_da_tabela = jtEditora.getSelectedRow();
             id = (int) jtEditora.getValueAt(linha_da_tabela, 0);
             EditoraServicos editoraS = ServicosFactory.getEditoraServicos();
-            Editora e = editoraS.getByDocID(id);
+            Editora e = new Editora();
+            e = editoraS.getByDocID(id);
 
             Object[] resp = {"Sim", "Não"};
             int resposta = JOptionPane.showOptionDialog(this,
@@ -430,7 +450,6 @@ public final class jfEditora extends javax.swing.JFrame {
                 editoraS.deletarEditora(e.getIdEditora());
                 addRowToTable();
                 JOptionPane.showMessageDialog(this, "Editora deletada com sucesso!");
-
             } else {
                 JOptionPane.showMessageDialog(this, "Entendemos sua decisão!",
                         ".: Deletar :.", JOptionPane.INFORMATION_MESSAGE);
@@ -448,11 +467,6 @@ public final class jfEditora extends javax.swing.JFrame {
         jbDeletar.setEnabled(true);
     }//GEN-LAST:event_jtEditoraMouseClicked
 
-    private void jtfNomeEditoraFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfNomeEditoraFocusLost
-        String NomeEditora = jtfNomeEditora.getText();
-        jtfNomeEditora.setText(NomeEditora.toUpperCase());
-    }//GEN-LAST:event_jtfNomeEditoraFocusLost
-
     private void jtfNomeEditoraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfNomeEditoraKeyTyped
         String caracteres = "0987654321/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
         if (!caracteres.contains(evt.getKeyChar() + "")) {
@@ -462,7 +476,7 @@ public final class jfEditora extends javax.swing.JFrame {
     }//GEN-LAST:event_jtfNomeEditoraKeyTyped
 
     private void jtfEnderecoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfEnderecoKeyTyped
-        String caracteres = "/[]{}=+_)(*&¨%$#@!<>;:?«»ºª";
+        String caracteres = "/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
         if (!caracteres.contains(evt.getKeyChar() + "")) {
         } else {
             evt.consume();
@@ -476,6 +490,14 @@ public final class jfEditora extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_jtfTelefoneKeyTyped
+
+    private void jtfGerenteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfGerenteKeyTyped
+        String caracteres = "0987654321/[]{}=+-_)(*&¨%$#@!<>;:?.,ºª«»";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfGerenteKeyTyped
 
     /**
      * @param args the command line arguments

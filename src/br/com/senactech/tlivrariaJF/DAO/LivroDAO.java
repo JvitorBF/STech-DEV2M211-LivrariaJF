@@ -155,4 +155,6 @@ public class LivroDAO {
         }
         return l;
     }
+    
+    /// atualiza estoque aqui
 }

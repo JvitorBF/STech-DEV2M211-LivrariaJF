@@ -192,7 +192,7 @@ public class ClienteDAO {
 
         try {
             String sql;
-            sql = "select cnpj from cliente where cnpj = " + cnpj;
+            sql = "select cnpj from cliente where cnpj = " + cnpj;            
             ResultSet rs = stat.executeQuery(sql);
             while (rs.next()) {
                 verCNPJ = rs.wasNull();

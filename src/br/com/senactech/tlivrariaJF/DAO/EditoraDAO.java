@@ -6,11 +6,7 @@
 package br.com.senactech.TLivrariaJF.DAO;
 
 import br.com.senactech.TLivrariaJF.conexao.Conexao;
-import br.com.senactech.TLivrariaJF.services.EditoraServicos;
-import br.com.senactech.TLivrariaJF.services.LivroServicos;
-import br.com.senactech.TLivrariaJF.services.ServicosFactory;
 import br.com.senactech.tlivrariaJF.model.Editora;
-import br.com.senactech.tlivrariaJF.model.Livro;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,7 +53,6 @@ public class EditoraDAO {
                     + eVO.getEndereco() + "','"
                     + eVO.getTelefone() + "','"
                     + eVO.getGerente() + "')";
-            System.out.println(sql);
             stmt.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao cadastrar editora!" + e.getMessage());
@@ -109,9 +104,31 @@ public class EditoraDAO {
         return e;
     }
 
+    public Boolean verNomeEd(String nome) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        boolean verNomeEd = true;
+
+        try {
+            String sql;
+            sql = "select nomeEditora from editora where nomeEditora = '" + nome + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                verNomeEd = rs.wasNull();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Editora com este nome não existe! \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+        return verNomeEd;
+    }
+
     public void deletarEditora(int id) throws SQLException {
         Connection con = Conexao.getConnection();
         Statement stmt = con.createStatement();
+        Editora ed = new Editora();
         try {
             String sql;
             sql = "delete from editora where ideditora = " + id;

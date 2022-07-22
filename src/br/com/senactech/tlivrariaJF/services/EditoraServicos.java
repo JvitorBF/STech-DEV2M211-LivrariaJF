@@ -52,4 +52,8 @@ public class EditoraServicos {
         return eVO.getIdEditora(nome);
     }
 
+    public boolean verNomeEd(String nome) throws SQLException {
+        EditoraDAO eDAO = DAOFactory.getEditoraDAO();
+        return eDAO.verNomeEd(nome);
+    }
 }

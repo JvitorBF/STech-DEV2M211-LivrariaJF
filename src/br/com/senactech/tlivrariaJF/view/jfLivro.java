@@ -8,7 +8,7 @@ package br.com.senactech.tlivrariaJF.view;
 import br.com.senactech.TLivrariaJF.services.EditoraServicos;
 import br.com.senactech.TLivrariaJF.services.LivroServicos;
 import br.com.senactech.TLivrariaJF.services.ServicosFactory;
-import br.com.senactech.tlivrariaJF.model.Editora;
+import br.com.senactech.TLivrariaJF.util.ValidaISBN;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.senactech.tlivrariaJF.model.Livro;
@@ -368,7 +368,7 @@ public final class jfLivro extends javax.swing.JFrame {
                 livroS.cadastrarLivro(l);
                 jbLimpar.doClick();
                 addRowToTable();
-                JOptionPane.showMessageDialog(this, "Livro " + l.getTitulo() + " cadastrado com sucesso!");
+                JOptionPane.showMessageDialog(this, "Livro '" + l.getTitulo() + "' cadastrado com sucesso!");
             } catch (SQLException ex) {
                 Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -390,6 +390,7 @@ public final class jfLivro extends javax.swing.JFrame {
         jtfPreco.setText("");
         jtfEstoque.setText("");
         jbLimpar.setText("Limpar");
+        jlEditora.setText("Editora");
         jcbEditora.setSelectedIndex(0);
         jtfTitulo.requestFocus();
 
@@ -444,7 +445,7 @@ public final class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jtfEstoqueKeyTyped
 
     private void jtfPrecoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfPrecoKeyTyped
-        String caracteres = ",1234567890";
+        String caracteres = "1234567890.";
         if (caracteres.contains(evt.getKeyChar() + "")) {
         } else {
             evt.consume();
@@ -554,7 +555,14 @@ public final class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jbDeletarActionPerformed
 
     private void jtfISBNFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfISBNFocusLost
-
+        if (!jtfISBN.getText().isBlank()) {
+            if (!ValidaISBN.isValidISBN(jtfISBN.getText())) {
+                JOptionPane.showMessageDialog(this,
+                        "ISBN informado esta incorreto!!!",
+                        ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                jtfISBN.requestFocus();
+            }
+        }
     }//GEN-LAST:event_jtfISBNFocusLost
 
     private boolean validaImputs() {
@@ -570,6 +578,7 @@ public final class jfLivro extends javax.swing.JFrame {
             jtfTitulo.requestFocus();
             return false;
         }
+
         return true;
     }
 

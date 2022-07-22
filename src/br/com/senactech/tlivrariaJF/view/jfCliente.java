@@ -553,7 +553,7 @@ public class jfCliente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtfCpfCnpjKeyTyped
 
-    private boolean validaImputs() {
+     private boolean validaImputs() {
         String telefone = jtfTelefone.getText();
         if (jtfNomeCliente.getText().isBlank()
                 || jtfCpfCnpj.getText().isBlank()
