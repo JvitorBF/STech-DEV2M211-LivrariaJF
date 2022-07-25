@@ -77,7 +77,8 @@ public class LivroDAO {
                     + "autor = '" + lVO.getAutor() + "',"
                     + "assunto = '" + lVO.getAssunto() + "',"
                     + "estoque = " + lVO.getEstoque() + ","
-                    + "valor = " + lVO.getPreco() + "";
+                    + "valor = " + lVO.getPreco() + ""
+                    + "where idlivro = " + lVO.getIdLivro() + "";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao atualizar livro! " + e.getMessage());
