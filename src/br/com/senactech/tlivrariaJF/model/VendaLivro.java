@@ -5,7 +5,7 @@
  */
 package br.com.senactech.tlivrariaJF.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -13,21 +13,31 @@ import java.util.Date;
  */
 public class VendaLivro {
 
+    private int idcompra;
     private int idcliente;
     private int idlivro;
-    private int qtd;
+    private int quantCompra;
     private float subTotal;
-    private Date dataVenda;
+    private LocalDate dataCompra;
 
     public VendaLivro() {
     }
 
-    public VendaLivro(int idCliente, int idLivro, int qtd, float subTotal, Date dataVenda) {
-        this.idcliente = idCliente;
-        this.idlivro = idLivro;
-        this.qtd = qtd;
+    public VendaLivro(int idcompra, int idcliente, int idlivro, int quantCompra, float subTotal, LocalDate dataCompra) {
+        this.idcompra = idcompra;
+        this.idcliente = idcliente;
+        this.idlivro = idlivro;
+        this.quantCompra = quantCompra;
         this.subTotal = subTotal;
-        this.dataVenda = dataVenda;
+        this.dataCompra = dataCompra;
+    }
+
+    public int getIdcompra() {
+        return idcompra;
+    }
+
+    public void setIdcompra(int idcompra) {
+        this.idcompra = idcompra;
     }
 
     public int getIdCliente() {
@@ -47,11 +57,11 @@ public class VendaLivro {
     }
 
     public int getQtd() {
-        return qtd;
+        return quantCompra;
     }
 
     public void setQtd(int qtd) {
-        this.qtd = qtd;
+        this.quantCompra = qtd;
     }
 
     public float getSubTotal() {
@@ -62,16 +72,16 @@ public class VendaLivro {
         this.subTotal = subTotal;
     }
 
-    public Date getDataVenda() {
-        return dataVenda;
+    public LocalDate getDataVenda() {
+        return dataCompra;
     }
 
-    public void setDataVenda(Date dataVenda) {
-        this.dataVenda = dataVenda;
+    public void setDataVenda(LocalDate dataCompra) {
+        this.dataCompra = dataCompra;
     }
 
     @Override
     public String toString() {
-        return "vendaLivro{" + "idCliente=" + idcliente + ", idLivro=" + idlivro + ", qtd=" + qtd + ", subTotal=" + subTotal + ", dataVenda=" + dataVenda + '}';
+        return "vendaLivro{" + "idcompra=" + idcompra + "idcliente=" + idcliente + ", idlivro=" + idlivro + ", quantCompra=" + quantCompra + ", subTotal=" + subTotal + ", dataCompra=" + dataCompra + '}';
     }
 }

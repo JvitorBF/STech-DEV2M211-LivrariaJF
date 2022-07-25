@@ -46,4 +46,20 @@ public class LivroServicos {
         LivroDAO lDAO = DAOFactory.getLivroDAO();
         return lDAO.getByDocID(id);
     }
+
+    public boolean verISBN(String isbn) throws SQLException {
+        LivroDAO lDAO = DAOFactory.getLivroDAO();
+        return lDAO.verISBN(isbn);
+    }
+
+    public void somarEstoque(int idlivro, int qtd) throws SQLException {
+        LivroDAO lVO = DAOFactory.getLivroDAO();
+        lVO.somarEstoque(idlivro, qtd);
+    }
+
+    public void subtrairEstoque(int idlivro, int qtd) throws SQLException {
+        LivroDAO lVO = DAOFactory.getLivroDAO();
+        lVO.subtrairEstoque(idlivro, qtd);
+    }
+
 }

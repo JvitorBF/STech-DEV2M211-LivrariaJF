@@ -59,7 +59,6 @@ public class LivroDAO {
                     + lVO.getEstoque() + ","
                     + lVO.getPreco() + ","
                     + lVO.getIdEditora() + ")";
-            System.out.println(sql);
             stmt.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao cadastrar Livro!" + e.getMessage());
@@ -87,6 +86,34 @@ public class LivroDAO {
         }
     }
 
+    public void somarEstoque(int idlivro, int qtd) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "update livro set estoque = estoque +" + qtd + " where idlivro = " + idlivro;
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao atualizar estoque! " + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void subtrairEstoque(int idlivro, int qtd) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        try {
+            String sql;
+            sql = "update livro set estoque = estoque -" + qtd + " where idlivro = " + idlivro;
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao atualizar estoque! " + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
     public void deletarLivro(int id) throws SQLException {
         Connection con = Conexao.getConnection();
         Statement stmt = con.createStatement();
@@ -108,7 +135,7 @@ public class LivroDAO {
         Livro l = new Livro();
         try {
             String sql;
-            sql = "select * from livro where isbn = " + isbn;
+            sql = "select * from livro where isbn = '" + isbn + "'";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 l.setIdLivro(rs.getInt("idlivro"));
@@ -155,6 +182,24 @@ public class LivroDAO {
         }
         return l;
     }
-    
-    /// atualiza estoque aqui
+
+    public boolean verISBN(String isbn) throws SQLException {
+        Connection con = Conexao.getConnection();
+        Statement stmt = con.createStatement();
+        boolean verISBN = false;
+        try {
+            String sql;
+            sql = "select isbn from livro where isbn = '" + isbn + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                verISBN = !rs.wasNull();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("livro com este ISBN não existe. \n"
+                    + e.getMessage());
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+        return verISBN;
+    }
 }

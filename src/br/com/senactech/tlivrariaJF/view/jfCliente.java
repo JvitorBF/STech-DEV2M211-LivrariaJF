@@ -59,7 +59,7 @@ public class jfCliente extends javax.swing.JFrame {
         jtfTelefone = new javax.swing.JTextField();
         jbSalvar = new javax.swing.JButton();
         jbLimpar = new javax.swing.JButton();
-        jbCancelar = new javax.swing.JButton();
+        jbSair = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtClientes = new javax.swing.JTable();
         jbEditar = new javax.swing.JButton();
@@ -80,6 +80,11 @@ public class jfCliente extends javax.swing.JFrame {
 
         bgCpfCnpj.add(jrbCnpj);
         jrbCnpj.setText("CNPJ");
+        jrbCnpj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrbCnpjActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Endereço:");
 
@@ -129,10 +134,10 @@ public class jfCliente extends javax.swing.JFrame {
             }
         });
 
-        jbCancelar.setText("Cancelar");
-        jbCancelar.addActionListener(new java.awt.event.ActionListener() {
+        jbSair.setText("Sair");
+        jbSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbCancelarActionPerformed(evt);
+                jbSairActionPerformed(evt);
             }
         });
 
@@ -232,7 +237,7 @@ public class jfCliente extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jbDeletar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbCancelar))
+                                .addComponent(jbSair))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jbSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -272,7 +277,7 @@ public class jfCliente extends javax.swing.JFrame {
                     .addComponent(jbEditar)
                     .addComponent(jbConfirmar)
                     .addComponent(jbDeletar)
-                    .addComponent(jbCancelar))
+                    .addComponent(jbSair))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 
@@ -312,10 +317,10 @@ public class jfCliente extends javax.swing.JFrame {
         jTableFilterClear();
     }//GEN-LAST:event_jbLimparActionPerformed
 
-    private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
+    private void jbSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSairActionPerformed
         // TODO add your handling code here:
         jfCliente.this.dispose();
-    }//GEN-LAST:event_jbCancelarActionPerformed
+    }//GEN-LAST:event_jbSairActionPerformed
 
     public void addRowToTableBD() throws SQLException {
         DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
@@ -355,11 +360,13 @@ public class jfCliente extends javax.swing.JFrame {
 
                 //Cadastro a partir das validações
                 if ((jrbCpf.isSelected()) && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
+                    c.setCpf(jtfCpfCnpj.getText());
                     clienteS.cadastrarClienteCPF(c);
                     addRowToTableBD();
                     jbLimpar.doClick();
                     JOptionPane.showMessageDialog(this, c.getNome() + " cadastrado(a) com sucesso!");
                 } else if ((jrbCnpj.isSelected()) && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
+                    c.setCnpj(jtfCpfCnpj.getText());
                     clienteS.cadastrarClienteCNPJ(c);
                     addRowToTableBD();
                     jbLimpar.doClick();
@@ -553,7 +560,11 @@ public class jfCliente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtfCpfCnpjKeyTyped
 
-     private boolean validaImputs() {
+    private void jrbCnpjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbCnpjActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jrbCnpjActionPerformed
+
+    private boolean validaImputs() {
         String telefone = jtfTelefone.getText();
         if (jtfNomeCliente.getText().isBlank()
                 || jtfCpfCnpj.getText().isBlank()
@@ -582,7 +593,7 @@ public class jfCliente extends javax.swing.JFrame {
                     jtfCpfCnpj.requestFocus();
                     return false;
                 } else try {
-                    if (!clienteS.verCPF(jtfCpfCnpj.getText())) {
+                    if (clienteS.verCPF(jtfCpfCnpj.getText())) {
                         JOptionPane.showMessageDialog(this,
                                 "CPF já cadastrado!!!",
                                 ".: Erro :.", JOptionPane.ERROR_MESSAGE);
@@ -600,7 +611,7 @@ public class jfCliente extends javax.swing.JFrame {
                     jtfCpfCnpj.requestFocus();
                     return false;
                 } else try {
-                    if (!clienteS.verCNPJ(jtfCpfCnpj.getText())) {
+                    if (clienteS.verCNPJ(jtfCpfCnpj.getText())) {
                         JOptionPane.showMessageDialog(this,
                                 "CNPJ já cadastrado!!!",
                                 ".: Erro :.", JOptionPane.ERROR_MESSAGE);
@@ -663,11 +674,11 @@ public class jfCliente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JButton jbCancelar;
     private javax.swing.JButton jbConfirmar;
     private javax.swing.JButton jbDeletar;
     private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbLimpar;
+    private javax.swing.JButton jbSair;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JRadioButton jrbCnpj;
     private javax.swing.JRadioButton jrbCpf;

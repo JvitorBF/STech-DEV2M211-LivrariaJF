@@ -28,4 +28,10 @@ public class DAOFactory {
     public static LivroDAO getLivroDAO() {
         return lDAO;
     }
+
+    private static final VendaLivroDAO vlDAO = new VendaLivroDAO();
+
+    public static VendaLivroDAO getVendaLivroDAO() {
+        return vlDAO;
+    }
 }

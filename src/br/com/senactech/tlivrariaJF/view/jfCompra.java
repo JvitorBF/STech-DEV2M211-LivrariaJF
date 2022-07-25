@@ -5,11 +5,31 @@
  */
 package br.com.senactech.TLivrariaJF.view;
 
+import br.com.senactech.TLivrariaJF.services.ClienteServicos;
+import br.com.senactech.TLivrariaJF.services.LivroServicos;
+import br.com.senactech.TLivrariaJF.services.ServicosFactory;
+import br.com.senactech.TLivrariaJF.services.VendaLivroServicos;
+import br.com.senactech.TLivrariaJF.util.ValidaCNPJ;
+import br.com.senactech.TLivrariaJF.util.ValidaCPF;
+import br.com.senactech.TLivrariaJF.util.ValidaISBN;
+import br.com.senactech.tlivrariaJF.model.Cliente;
+import br.com.senactech.tlivrariaJF.model.Livro;
+import br.com.senactech.tlivrariaJF.model.VendaLivro;
+import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author João Vitor
  */
 public class jfCompra extends javax.swing.JFrame {
+
+    JButton btnClick = null;
 
     /**
      * Creates new form jfCompra
@@ -27,20 +47,26 @@ public class jfCompra extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jlISBN = new javax.swing.JLabel();
-        jlData = new javax.swing.JLabel();
         jlQuantidade = new javax.swing.JLabel();
         jtfISBN = new javax.swing.JTextField();
-        jtfData = new javax.swing.JTextField();
         jtfQuantidade = new javax.swing.JTextField();
         jtfCnpjCpf = new javax.swing.JTextField();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        jrbCPF = new javax.swing.JRadioButton();
+        jrbCNPJ = new javax.swing.JRadioButton();
         jlLivro = new javax.swing.JLabel();
         jlProprietario = new javax.swing.JLabel();
+        jbCompra = new javax.swing.JButton();
+        jbDevolucao = new javax.swing.JButton();
+        jbSair = new javax.swing.JButton();
+        jlEstoque = new javax.swing.JLabel();
+        jlValorFinal = new javax.swing.JLabel();
+        jbLimpar = new javax.swing.JButton();
+        jlPreco = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,17 +76,84 @@ public class jfCompra extends javax.swing.JFrame {
 
         jlISBN.setText("ISBN:");
 
-        jlData.setText("Data:");
-
         jlQuantidade.setText("Quantidade:");
 
-        jRadioButton1.setText("CPF");
+        jtfISBN.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfISBNFocusLost(evt);
+            }
+        });
+        jtfISBN.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfISBNKeyTyped(evt);
+            }
+        });
 
-        jRadioButton2.setText("CNPJ");
+        jtfQuantidade.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfQuantidadeFocusLost(evt);
+            }
+        });
+        jtfQuantidade.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfQuantidadeKeyTyped(evt);
+            }
+        });
+
+        jtfCnpjCpf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfCnpjCpfFocusLost(evt);
+            }
+        });
+        jtfCnpjCpf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfCnpjCpfKeyTyped(evt);
+            }
+        });
+
+        buttonGroup1.add(jrbCPF);
+        jrbCPF.setText("CPF");
+
+        buttonGroup1.add(jrbCNPJ);
+        jrbCNPJ.setText("CNPJ");
 
         jlLivro.setText("Livro");
 
         jlProprietario.setText("Proprietário");
+
+        jbCompra.setText("Compra");
+        jbCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbCompraActionPerformed(evt);
+            }
+        });
+
+        jbDevolucao.setText("Devolução");
+        jbDevolucao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbDevolucaoActionPerformed(evt);
+            }
+        });
+
+        jbSair.setText("Sair");
+        jbSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSairActionPerformed(evt);
+            }
+        });
+
+        jlEstoque.setText("Estoque: 0");
+
+        jlValorFinal.setText("Valor Final: R$ 0");
+
+        jbLimpar.setText("Limpar");
+        jbLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbLimparActionPerformed(evt);
+            }
+        });
+
+        jlPreco.setText("Preço: R$ 0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,40 +164,49 @@ public class jfCompra extends javax.swing.JFrame {
                 .addComponent(jSeparator2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jlQuantidade)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jtfQuantidade))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jlData)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jlPreco)
                                     .addGap(18, 18, 18)
-                                    .addComponent(jtfData, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jlValorFinal))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jlISBN)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jtfISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jlLivro))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jlQuantidade)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jlEstoque))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlISBN)
-                                .addGap(18, 18, 18)
-                                .addComponent(jtfISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jrbCPF)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jlLivro)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jrbCNPJ)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jtfCnpjCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jlProprietario))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtfCnpjCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlProprietario)))
-                .addContainerGap())
+                        .addContainerGap()
+                        .addComponent(jbCompra)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbDevolucao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbLimpar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbSair))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jRadioButton1, jRadioButton2});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jrbCNPJ, jrbCPF});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,30 +219,409 @@ public class jfCompra extends javax.swing.JFrame {
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrbCPF)
+                    .addComponent(jrbCNPJ)
                     .addComponent(jtfCnpjCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
                     .addComponent(jlProprietario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlISBN)
                     .addComponent(jtfISBN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlLivro))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jlData)
-                    .addComponent(jtfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlQuantidade)
-                    .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 19, Short.MAX_VALUE))
+                    .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlEstoque))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlValorFinal)
+                    .addComponent(jlPreco))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbCompra)
+                    .addComponent(jbDevolucao)
+                    .addComponent(jbSair)
+                    .addComponent(jbLimpar))
+                .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jRadioButton1, jRadioButton2});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jrbCNPJ, jrbCPF});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jtfISBNFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfISBNFocusLost
+        LivroServicos livroS = ServicosFactory.getLivroServicos();
+        if (!jtfISBN.getText().isBlank()) {
+            if (!ValidaISBN.isValidISBN(jtfISBN.getText())) {
+                JOptionPane.showMessageDialog(this,
+                        "ISBN informado esta incorreto!!!",
+                        ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                jtfISBN.requestFocus();
+            } else try {
+                if (livroS.verISBN(jtfISBN.getText())) {
+                    Livro l = livroS.getByDocISBN(jtfISBN.getText());
+                    jlLivro.setText(l.getTitulo());
+                    jlEstoque.setText("Estoque: " + String.valueOf(l.getEstoque()));
+                    jlPreco.setText("Preço: R$ " + l.getPreco());
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(jfCompra.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jtfISBNFocusLost
+
+    private void jtfCnpjCpfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfCnpjCpfFocusLost
+        ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+        if (jrbCPF.isSelected() && !jrbCNPJ.isSelected()) {
+            if (!jtfCnpjCpf.getText().isBlank()) {
+                if (!ValidaCPF.isCPF(jtfCnpjCpf.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CPF informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCnpjCpf.requestFocus();
+                } else try {
+                    if (clienteS.verCPF(jtfCnpjCpf.getText())) {
+                        Cliente c = clienteS.getByDocCPF(jtfCnpjCpf.getText());
+                        jlProprietario.setText(c.getNome());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(jfCompra.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if (!jrbCPF.isSelected() && jrbCNPJ.isSelected()) {
+            if (!jtfCnpjCpf.getText().isBlank()) {
+                if (!ValidaCNPJ.isCNPJ(jtfCnpjCpf.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CNPJ informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCnpjCpf.requestFocus();
+                } else try {
+                    if (clienteS.verCNPJ(jtfCnpjCpf.getText())) {
+                        Cliente c = clienteS.getByDocCNPJ(jtfCnpjCpf.getText());
+                        jlProprietario.setText(c.getNome());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(jfCompra.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_jtfCnpjCpfFocusLost
+
+    private void jbSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSairActionPerformed
+        jfCompra.this.dispose();
+    }//GEN-LAST:event_jbSairActionPerformed
+
+    private void jbCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompraActionPerformed
+        btnClick = (JButton) evt.getSource();
+        if (validaImputs()) {
+            try {
+                ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+                VendaLivroServicos vendaLivroS = ServicosFactory.getVendaLivroServicos();
+                LivroServicos livroS = ServicosFactory.getLivroServicos();
+                Livro l = new Livro();
+                VendaLivro vl = new VendaLivro();
+                l = livroS.getByDocISBN(jtfISBN.getText());
+                int qtd = Integer.parseInt(jtfQuantidade.getText());
+                float preco = l.getPreco();
+                float subTotal = preco * qtd;
+                LocalDate dataVenda = LocalDate.now();
+
+                Object[] resp = {"Sim", "Não"};
+                int resposta = JOptionPane.showOptionDialog(this,
+                        "Deseja realmente comprar '" + l.getTitulo() + "' ?"
+                        + "\n"
+                        + "\nQuantidade: " + qtd
+                        + "\nValor por Unidade: " + preco
+                        + "\nValor Total: " + subTotal
+                        + "\nData da compra: " + dataVenda,
+                        ".: Compra :.", JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE, null, resp, resp[0]);
+                if (resposta == 0) {
+                    if (jrbCPF.isSelected()) {
+                        Cliente c = clienteS.getByDocCPF(jtfCnpjCpf.getText());
+                        int id = c.getIdcliente();
+                        vl.setIdCliente(id);
+                    } else if (jrbCNPJ.isSelected()) {
+                        Cliente c = clienteS.getByDocCNPJ(jtfCnpjCpf.getText());
+                        int id = c.getIdcliente();
+                        vl.setIdCliente(id);
+                    }
+                    vl.setIdLivro(l.getIdLivro());
+                    vl.setDataVenda(dataVenda);
+                    vl.setQtd(Integer.parseInt(jtfQuantidade.getText()));
+                    vl.setSubTotal(subTotal);
+                    vendaLivroS.registrarVenda(vl);
+                    livroS.subtrairEstoque(l.getIdLivro(), qtd);
+                    JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!");
+                    jbLimpar.doClick();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Compra cancelada!",
+                            ".: Compra :.", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(jfCompra.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jbCompraActionPerformed
+
+    private void jbDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDevolucaoActionPerformed
+        btnClick = (JButton) evt.getSource();
+        if (validaImputs()) {
+            try {
+                VendaLivroServicos vendaLivroS = ServicosFactory.getVendaLivroServicos();
+                ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+                LivroServicos livroS = ServicosFactory.getLivroServicos();
+                VendaLivro vl = new VendaLivro();
+                Cliente c = new Cliente();
+                Livro l = new Livro();
+                l = livroS.getByDocISBN(jtfISBN.getText());
+                vl = vendaLivroS.getByDocIDlivro(l.getIdLivro());
+                if (jrbCPF.isSelected()) {
+                    c = clienteS.getByDocCPF(jtfCnpjCpf.getText());
+                    Object[] resp = {"Sim", "Não"};
+                    int resposta = JOptionPane.showOptionDialog(this,
+                            c.getNome() + ", deseja devolver o livro '" + l.getTitulo() + "'",
+                            ".: Devolução :.", JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE, null, resp, resp[0]);
+                    if (resposta == 0) {
+                        int qtd = vl.getQtd();
+                        vendaLivroS.deletarVenda(vl.getIdcompra());
+                        livroS.somarEstoque(l.getIdLivro(), qtd);
+                        jbLimpar.doClick();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Devolução cancelada!",
+                                ".: Devolução :.", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else if (jrbCNPJ.isSelected()) {
+                    c = clienteS.getByDocCNPJ(jtfCnpjCpf.getText());
+                    Object[] resp = {"Sim", "Não"};
+                    int resposta = JOptionPane.showOptionDialog(this,
+                            c.getNome() + ", deseja devolver o livro '" + l.getTitulo() + "'",
+                            ".: Devolução :.", JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE, null, resp, resp[0]);
+                    if (resposta == 0) {
+                        int qtd = vl.getQtd();
+                        vendaLivroS.deletarVenda(vl.getIdcompra());
+                        livroS.somarEstoque(l.getIdLivro(), qtd);
+                        jbLimpar.doClick();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Devolução cancelada!",
+                                ".: Devolução :.", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(jfCompra.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jbDevolucaoActionPerformed
+
+    private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
+        jtfCnpjCpf.setText("");
+        jtfISBN.setText("");
+        jtfQuantidade.setText("");
+        buttonGroup1.clearSelection();
+        jlProprietario.setText("Proprietário");
+        jlLivro.setText("Livro");
+        jlEstoque.setText("Estoque: 0");
+        jlValorFinal.setText("Valor Final: R$ 0");
+        jlPreco.setText("Preço: R$ 0");
+        jtfCnpjCpf.requestFocus();
+    }//GEN-LAST:event_jbLimparActionPerformed
+
+    private void jtfQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfQuantidadeFocusLost
+        try {
+            LivroServicos livroS = ServicosFactory.getLivroServicos();
+            if (!jtfQuantidade.getText().isBlank() && !jtfISBN.getText().isBlank()
+                    && livroS.verISBN(jtfISBN.getText())) {
+                Livro l = livroS.getByDocISBN(jtfISBN.getText());
+                int qtd = Integer.parseInt(jtfQuantidade.getText());
+                if (qtd <= l.getEstoque()) {
+                    float preco = l.getPreco();
+                    jlValorFinal.setText("Valor Final: R$ " + NumberFormat.getCurrencyInstance().format(preco * qtd));
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(jfCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jtfQuantidadeFocusLost
+
+    private void jtfCnpjCpfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCnpjCpfKeyTyped
+        String caracteres = "-.1234567890";
+        if (caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfCnpjCpfKeyTyped
+
+    private void jtfISBNKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfISBNKeyTyped
+        String caracteres = "-1234567890";
+        if (caracteres.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfISBNKeyTyped
+
+    private void jtfQuantidadeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfQuantidadeKeyTyped
+        String caracter = "1234567890";
+        if (caracter.contains(evt.getKeyChar() + "")) {
+        } else {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfQuantidadeKeyTyped
+
+    private boolean validaImputs() {
+        try {
+            if (jtfCnpjCpf.getText().isBlank()
+                    || jtfISBN.getText().isBlank()
+                    || jtfQuantidade.getText().isBlank()
+                    || buttonGroup1.getSelection() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Todos os campos devem ser preenchidos!",
+                        ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                jtfCnpjCpf.requestFocus();
+                return false;
+            }
+
+            ClienteServicos clienteS = ServicosFactory.getClienteServicos();
+            LivroServicos livroS = ServicosFactory.getLivroServicos();
+
+            if (!ValidaISBN.isValidISBN(jtfISBN.getText())) {
+                JOptionPane.showMessageDialog(this,
+                        "ISBN informado esta incorreto!!!",
+                        ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                jtfISBN.requestFocus();
+            }
+
+            if (!jrbCNPJ.isSelected()) {
+                if (!ValidaCPF.isCPF(jtfCnpjCpf.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CPF informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCnpjCpf.requestFocus();
+                    return false;
+                } else try {
+                    if ("Compra".equals(btnClick.getText())) {
+                        if (!clienteS.verCPF(jtfCnpjCpf.getText())) {
+                            jlProprietario.setText("Proprietário inexistente!");
+                            String msg = "Primeiro cadastre o portador deste CPF: " + ValidaCPF.imprimeCPF(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a compra do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfCnpjCpf.requestFocus();
+                            return false;
+                        }
+                        if (!livroS.verISBN(jtfISBN.getText())) {
+                            jlLivro.setText("Livro inexistente!");
+                            String msg = "Primeiro registre o livro deste ISBN: " + ValidaISBN.imprimeISBN(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a compra do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfISBN.requestFocus();
+                            return false;
+                        }
+                    } else if ("Devolução".equals(btnClick.getText())) {
+                        if (!clienteS.verCPF(jtfCnpjCpf.getText())) {
+                            jlProprietario.setText("Proprietário inexistente!");
+                            String msg = "Primeiro cadastre o portador deste CPF: " + ValidaCPF.imprimeCPF(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a devolução do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfCnpjCpf.requestFocus();
+                            return false;
+                        }
+                        if (!livroS.verISBN(jtfISBN.getText())) {
+                            jlLivro.setText("Livro inexistente!");
+                            String msg = "Primeiro registre o livro deste ISBN: " + ValidaISBN.imprimeISBN(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a devolução do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfISBN.requestFocus();
+                            return false;
+                        }
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(jfCompra.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (!jrbCPF.isSelected()) {
+                if (!ValidaCNPJ.isCNPJ(jtfCnpjCpf.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "CNPJ informado esta incorreto!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfCnpjCpf.requestFocus();
+                    return false;
+                } else try {
+                    if (("Compra").equals(btnClick.getText())) {
+                        if (!clienteS.verCNPJ(jtfCnpjCpf.getText())) {
+                            jlProprietario.setText("Proprietário inexistente!");
+                            String msg = "Primeiro cadastre o portador deste CNPJ: " + ValidaCNPJ.imprimeCNPJ(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a compra do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfCnpjCpf.requestFocus();
+                            return false;
+                        }
+                        if (!livroS.verISBN(jtfISBN.getText())) {
+                            jlLivro.setText("Livro inexistente!");
+                            String msg = "Primeiro registre o livro deste ISBN: " + ValidaISBN.imprimeISBN(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a compra do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfISBN.requestFocus();
+                            return false;
+                        }
+                    } else if ("Devolução".equals(btnClick.getText())) {
+                        if (!clienteS.verCNPJ(jtfCnpjCpf.getText())) {
+                            jlProprietario.setText("Proprietário inexistente!");
+                            String msg = "Primeiro cadastre o portador deste CNPJ: " + ValidaCNPJ.imprimeCNPJ(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a devolução do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfCnpjCpf.requestFocus();
+                            return false;
+                        }
+                        if (!livroS.verISBN(jtfISBN.getText())) {
+                            jlLivro.setText("Livro inexistente!");
+                            String msg = "Primeiro registre o livro deste ISBN: " + ValidaISBN.imprimeISBN(jtfCnpjCpf.getText())
+                                    + ". Para assim efetuar a devolução do livro!";
+                            JOptionPane.showMessageDialog(this, msg, ".: Erro :.",
+                                    JOptionPane.ERROR_MESSAGE);
+                            jtfISBN.requestFocus();
+                            return false;
+                        }
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(jfCompra.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if ("Compra".equals(btnClick.getText())) {
+                if (!jtfQuantidade.getText().isBlank() && !jtfISBN.getText().isBlank()) {
+                    Livro l = livroS.getByDocISBN(jtfISBN.getText());
+                    int qtd = Integer.parseInt(jtfQuantidade.getText());
+                    if (qtd <= l.getEstoque()) {
+                        int preco = (int) l.getPreco();
+                        jlValorFinal.setText("Valor Final: R$ " + (preco * qtd));
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Quantidade não corresponde ao número disponível em estoque!"
+                                + "\n"
+                                + "\nQuantidade: " + qtd
+                                + "\nEstoque:" + l.getEstoque(),
+                                ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                        jtfQuantidade.requestFocus();
+                        return false;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(jfCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
 
     /**
      * @param args the command line arguments
@@ -159,13 +640,17 @@ public class jfCompra extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(jfCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfCompra.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(jfCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfCompra.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(jfCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfCompra.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(jfCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfCompra.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -178,18 +663,24 @@ public class jfCompra extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel jlData;
+    private javax.swing.JButton jbCompra;
+    private javax.swing.JButton jbDevolucao;
+    private javax.swing.JButton jbLimpar;
+    private javax.swing.JButton jbSair;
+    private javax.swing.JLabel jlEstoque;
     private javax.swing.JLabel jlISBN;
     private javax.swing.JLabel jlLivro;
+    private javax.swing.JLabel jlPreco;
     private javax.swing.JLabel jlProprietario;
     private javax.swing.JLabel jlQuantidade;
+    private javax.swing.JLabel jlValorFinal;
+    private javax.swing.JRadioButton jrbCNPJ;
+    private javax.swing.JRadioButton jrbCPF;
     private javax.swing.JTextField jtfCnpjCpf;
-    private javax.swing.JTextField jtfData;
     private javax.swing.JTextField jtfISBN;
     private javax.swing.JTextField jtfQuantidade;
     // End of variables declaration//GEN-END:variables

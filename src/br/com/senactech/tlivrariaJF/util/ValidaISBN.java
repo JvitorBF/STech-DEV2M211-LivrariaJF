@@ -50,4 +50,10 @@ public class ValidaISBN {
             return (false);
         }
     }
+
+    public static String imprimeISBN(String ISBN) {
+        return (ISBN.substring(0, 2) + "-" + ISBN.substring(2, 5) + "-"
+                + ISBN.substring(5, 9) + "-" + ISBN.substring(9, 10));
+    }
+    //Formato:  85-359-0277-5
 }

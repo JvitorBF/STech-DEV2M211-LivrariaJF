@@ -55,7 +55,6 @@ public class ClienteDAO {
                     + cVO.getTelefone() + "','"
                     + cVO.getCpf() + "',"
                     + "null" + ")";
-            System.out.println(sql);
             stmt.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao cadastrar cliente Físico! " + e.getMessage());
@@ -73,7 +72,7 @@ public class ClienteDAO {
                     + cVO.getEndereco() + "','"
                     + cVO.getTelefone() + "',"
                     + "null" + ",'"
-                    + cVO.getCnpj() + "')";
+                    + cVO.getCnpj() + "')";            
             System.out.println(sql);
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -107,7 +106,7 @@ public class ClienteDAO {
         Cliente c = new Cliente();
         try {
             String sql;
-            sql = "select * from cliente where cpf = " + cpf;
+            sql = "select * from cliente where cpf = '" + cpf + "'";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 c.setIdcliente(rs.getInt("idcliente"));
@@ -131,7 +130,7 @@ public class ClienteDAO {
         Cliente c = new Cliente();
         try {
             String sql;
-            sql = "select * from cliente where cnpj = " + cnpj;
+            sql = "select * from cliente where cnpj = '" + cnpj + "'";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 c.setIdcliente(rs.getInt("idcliente"));
@@ -164,17 +163,17 @@ public class ClienteDAO {
         }
     }
 
-    public Boolean verCPF(String cpf) throws SQLException {
+    public boolean verCPF(String cpf) throws SQLException {
         Connection con = Conexao.getConnection();
         Statement stat = con.createStatement();
         boolean verCPF = false;
 
         try {
             String sql;
-            sql = "select cpf from cliente where cpf = " + cpf;
+            sql = "select cpf from cliente where cpf = '" + cpf + "'";
             ResultSet rs = stat.executeQuery(sql);
             while (rs.next()) {
-                verCPF = rs.wasNull();
+                verCPF = !rs.wasNull();
             }
         } catch (SQLException e) {
             throw new SQLException("Cliente com este CPF não existe. \n"
@@ -192,10 +191,10 @@ public class ClienteDAO {
 
         try {
             String sql;
-            sql = "select cnpj from cliente where cnpj = " + cnpj;            
+            sql = "select cnpj from cliente where cnpj = '" + cnpj + "'";
             ResultSet rs = stat.executeQuery(sql);
             while (rs.next()) {
-                verCNPJ = rs.wasNull();
+                verCNPJ = !rs.wasNull();
             }
         } catch (SQLException e) {
             throw new SQLException("Cliente com este CNPJ não existe. \n"

@@ -15,6 +15,7 @@ import br.com.senactech.tlivrariaJF.model.Livro;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -23,6 +24,8 @@ import javax.swing.table.TableRowSorter;
  * @author jairb
  */
 public final class jfLivro extends javax.swing.JFrame {
+
+    JButton btnClick = null;
 
     /**
      * Creates new form jfLivro
@@ -351,7 +354,8 @@ public final class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jbSairActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        // TODO add your handling code here:        
+        btnClick = (JButton) evt.getSource();
+
         if (validaImputs()) {
             try {
                 LivroServicos livroS = ServicosFactory.getLivroServicos();
@@ -566,6 +570,7 @@ public final class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jtfISBNFocusLost
 
     private boolean validaImputs() {
+        LivroServicos livroS = ServicosFactory.getLivroServicos();
         if (jtfTitulo.getText().isBlank()
                 || jtfAutor.getText().isBlank()
                 || jtfAssunto.getText().isBlank()
@@ -578,7 +583,19 @@ public final class jfLivro extends javax.swing.JFrame {
             jtfTitulo.requestFocus();
             return false;
         }
-
+        if ("Salvar".equals(btnClick.getText())) {
+            try {
+                if (livroS.verISBN(jtfISBN.getText())) {
+                    JOptionPane.showMessageDialog(this,
+                            "ISBN já cadastrado!!!",
+                            ".: Erro :.", JOptionPane.ERROR_MESSAGE);
+                    jtfISBN.requestFocus();
+                    return false;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return true;
     }
 
