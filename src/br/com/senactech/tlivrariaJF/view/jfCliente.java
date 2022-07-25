@@ -470,6 +470,7 @@ public class jfCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jbDeletarActionPerformed
 
     private void jbConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConfirmarActionPerformed
+        btnClick = (JButton) evt.getSource();
         if (validaImputs()) {
             try {
                 ClienteServicos clienteS = ServicosFactory.getClienteServicos();

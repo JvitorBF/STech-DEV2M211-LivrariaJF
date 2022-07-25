@@ -78,6 +78,7 @@ public final class jfEditora extends javax.swing.JFrame {
             return false;
         }
         if ("Salvar".equals(btnClick.getText())) {
+            System.out.println("afa");
             try {
                 if (!editoraS.verNomeEd(jtfNomeEditora.getText())) {
                     JOptionPane.showMessageDialog(this,
@@ -397,7 +398,7 @@ public final class jfEditora extends javax.swing.JFrame {
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConfirmarActionPerformed
-        // TODO add your handling code here:
+        btnClick = (JButton) evt.getSource();
         if (validaInputs()) {
             try {
                 EditoraServicos editoraS = ServicosFactory.getEditoraServicos();

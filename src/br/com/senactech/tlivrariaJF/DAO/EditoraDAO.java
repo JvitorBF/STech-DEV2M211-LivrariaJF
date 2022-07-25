@@ -71,6 +71,7 @@ public class EditoraDAO {
                     + "telefone = '" + eVO.getTelefone() + "',"
                     + "gerente = '" + eVO.getGerente() + "'"
                     + "where ideditora = " + eVO.getIdEditora() + "";
+            System.out.println(sql);
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao atualizar editora! " + e.getMessage());

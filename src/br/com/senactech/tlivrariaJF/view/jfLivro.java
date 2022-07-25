@@ -495,6 +495,7 @@ public final class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConfirmarActionPerformed
+        btnClick = (JButton) evt.getSource();
         if (validaImputs()) {
             try {
                 LivroServicos livroS = ServicosFactory.getLivroServicos();
